@@ -5,4 +5,4 @@ format: jb-book
 root: intro
 chapters:
 - file: src/day1-flucoma
-
+- file: bibliography.md
