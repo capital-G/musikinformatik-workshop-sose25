@@ -57,9 +57,12 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'src/day1-flucoma';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Bibliography" href="../bibliography.html" />
     <link rel="prev" title="Intro" href="../intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -180,6 +183,7 @@
         </ul>
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Day 1 - Introduction to FluCoMa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">Bibliography</a></li>
 </ul>
 
     </div>
@@ -320,7 +324,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -336,6 +342,28 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-project">The project</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-the-dataset">Loading the dataset</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analyze-and-represent-the-data">Analyze and represent the data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prepare-whole-dataset">Prepare whole dataset</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-the-pca">Training the PCA</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluate">Evaluate</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-on-the-server-in-realtime">Running on the server in realtime</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-tasks">Further Tasks</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -347,18 +375,559 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="day-1-introduction-to-flucoma">
 <h1>Day 1 - Introduction to FluCoMa<a class="headerlink" href="#day-1-introduction-to-flucoma" title="Link to this heading">#</a></h1>
+<p>Coding, as the codification of rules, becomes really tricky if a precise forumlation of the rules of a given problem to really hard - e.g. what would be a good rule to detect a face in a picture?
+Machine learnining algorithms can help in such a case as they provide a way to use data to adjust and align possible rules within a given algorithm through data.
+But of course this also comes with a trade off: one has now instead to solve the problem to figure out a good algorithm so it can detect the patterns within the data, data and more computing resources become necessary and it becomes difficult or impossible to improve or understand the algorithm by tweaking it.</p>
+<p>Although most Machine Learning is performed within Python these days, FluCoMa provides a really unique way to interact with real time audio data by running in a DSP environment, which allows the capabilities of data pattern extraction to be applied upon real time audio data in a variety of environments such as SuperCollider, MaxMSP and pd.
+This is not really feasible within Python.</p>
+<p>This course will therefore will not cover advanced architectures such as the transformer architecture which is used by Chat GPT (Chat <strong>G</strong>enerative <strong>P</strong>re-trained <strong>T</strong>ransformer) as there are already dedicated Python frameworks to this specific kind of architecture.
+Instead we will focus on smaller and simpler algorithms as they are easier to understand, work with and also fit our requirement to be computable within realtime - which means thousands of times per second in a time-critical environment.
+A recommended book for a general introduction into machine learning is <span id="id1">[<a class="reference internal" href="../bibliography.html#id2" title="Aurélien Géron. Hands-on machine learning with scikit-learn, keras, and tensorflow. O'Reilly Media, 3 edition, October 2022.">Geron22</a>]</span>, the <a class="reference external" href="https://scikit-learn.org/stable/user_guide.html">scikit-learn user guide</a> and the <a class="reference external" href="https://scikit-learn.org/stable/user_guide.html">PyTorch tutorials</a>.</p>
+<p>So lets start by installing FluCoMa for SuperCollider.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
+<p>In order to install FluCoMa head over to <a class="reference external" href="https://www.flucoma.org/download/">https://www.flucoma.org/download/</a> and download the matching version for your operating system.
+Copy the content of the archive to the extension directory which can be opened by executing the following line from within SuperCollider (the exact path is different for every user/computer, so make sure to execute it).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span><span class="o">+</span><span class="mi">2</span>
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="nx">Platform</span><span class="p">.</span><span class="nx">userExtensionDir</span><span class="p">.</span><span class="nx">openOS</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-&gt; 4
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-&gt; /Users/scheiba/Library/Application Support/SuperCollider/Extensions
 </pre></div>
 </div>
 </div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure that you have a matching version of SuperCollider version - the newest SuperCollider version should always be compatible with the newest FluCoMa version.</p>
+</div>
+<p>After copying the file restart the SuperCollider interpreter (click on <em>Language-&gt;Restart interpreter</em> on the menu of the IDE) and start to type <code class="docutils literal notranslate"><span class="pre">Fluid</span></code> into a Document - if the autocompletion with classes such as <code class="docutils literal notranslate"><span class="pre">FluidAmpFeature</span></code> appear the language part of FluCoMa has been sucessfully installed for SuperCollider.</p>
+<p>The next step is to boot the server which can be done via</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="nx">s</span><span class="p">.</span><span class="nx">reboot</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-&gt; localhost
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the server crashes during booting this is probably due to a incompatible SuperCollider and FluCoMa versions.
+Please check the FluCoMa website for more information.</p>
+</div>
+</section>
+<section id="the-project">
+<h2>The project<a class="headerlink" href="#the-project" title="Link to this heading">#</a></h2>
+<p>The first project we want to use to get into FluCoMa will be a 2D map of kick drum sounds so we can navigate through the map of kick sounds with our mouse.
+Sounds which are similar should be mapped into a similar location, so islands of similar sounds can be created.</p>
+<p>The general structure will be</p>
+<ul class="simple">
+<li><p>load the dataset</p></li>
+<li><p>try to find a good representation of our data through statistical means</p></li>
+<li><p>train a dimensionality reduction algorithm (in this example we will focus on <a class="reference external" href="https://en.wikipedia.org/wiki/Principal_component_analysis">PCA</a></p></li>
+<li><p>explore what the algorithm did</p></li>
+<li><p>apply it in a real time environment on the server</p></li>
+</ul>
+<section id="loading-the-dataset">
+<h3>Loading the dataset<a class="headerlink" href="#loading-the-dataset" title="Link to this heading">#</a></h3>
+<p>In my example I will use the <a class="reference external" href="https://www.musicradar.com/news/sampleradar-creative-kick-drum-samples"><em>Creative kick drum samples</em></a> collection from music radar.
+You are invited to choose your own dataset of files.
+In order to keep things simple really short samples (not longer than 1 second) between 100 and 1000 samples are recommended - though they don’t have to be only of one class (e.g. kick drum).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>One thing to keep in mind: As we start to parse data it is also crucial that this data is also somehow uniform in regards to technical parameters.
+The files should share a common sample rate, bitrate and format.
+Tools like <a class="reference external" href="https://ffmpeg.org/"><code class="docutils literal notranslate"><span class="pre">ffmpeg</span></code></a> are invaluable to convert media into a common format.</p>
+</div>
+<p>In order to keep things more simple we will limit the dataset to mono samples (i.e. we assume that the stereo seperation of a kick drum is neglectable in order to differentiate them).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="o">~</span><span class="nx">sampleBuffers</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">PathName</span><span class="p">(</span><span class="s2">&quot;/Users/scheiba/supercollider/Creative Kicks/&quot;</span><span class="p">).</span><span class="nx">filesDo</span><span class="p">({</span><span class="o">|</span><span class="nx">file</span><span class="o">|</span>
+	<span class="o">~</span><span class="nx">sampleBuffers</span> <span class="o">=</span> <span class="o">~</span><span class="nx">sampleBuffers</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">Buffer</span><span class="p">.</span><span class="nx">readChannel</span><span class="p">(</span>
+		<span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span>
+		<span class="nx">path</span><span class="o">:</span> <span class="nx">file</span><span class="p">.</span><span class="nx">asAbsolutePath</span><span class="p">,</span>
+		<span class="c1">// only mono</span>
+		<span class="nx">channels</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+	<span class="p">));</span>
+<span class="p">});</span>
+<span class="s2">&quot;Loaded % samples&quot;</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="o">~</span><span class="nx">sampleBuffers</span><span class="p">.</span><span class="nx">size</span><span class="p">).</span><span class="nx">postln</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loaded 490 samples
+-&gt; Loaded 490 samples
+</pre></div>
+</div>
+</div>
+</div>
+<p>It is always a good to verify the data structure on every step.
+If the data becomes misaligned for some reason it becomes impossible for the algorithm to extract any data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="o">~</span><span class="nx">sampleBuffers</span><span class="p">.</span><span class="nx">choose</span><span class="p">.</span><span class="nx">postln</span><span class="p">.</span><span class="nx">play</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Buffer(255, 81439, 1, 44100.0, /Users/scheiba/supercollider/Creative Kicks/Electronic Kicks/Electronic Kick 77.wav)
+-&gt; Synth(&#39;temp__0&#39; : 1000)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="analyze-and-represent-the-data">
+<h2>Analyze and represent the data<a class="headerlink" href="#analyze-and-represent-the-data" title="Link to this heading">#</a></h2>
+<p>The next step is tyring to represent each kick drum sample through a mathematical high level abstraction: a vector, which can be seen as a position in a high dimensional room, is the way to go here.</p>
+<p>We will come up with different extraction parameters which try to capture the charateristics of the kick drum sample (e.g. length, loudest frequency, …), where each parameter becomes a dimension in the parameter room.
+There is a trade-off between excessive parameters and.
+And while operating and navigating in a high dimensional room is somehow feasible within mathematics (be aware of the <em>course of dimensionality</em> though), it becomes impratical when interacting with it as a person.
+This is the reason why we perform a dimensionality reduction - we first try to come up with a mathematical representation of our samples and later try to compress the information of this representation down to two dimensions.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The crafting of good parameters is an art in itself and is worth spending some thought and time upon as it provides the senses for the model to comprehend the data.
+The more complex the data becomes, the more difficult it gets to compose meaningful feature representation of the given data.</p>
+<p>Deep learning, which is a term for neural networks with a larger amount of hidden layers, allowed to find ways to come up with feauter extraction methods as part of its learning process.</p>
+</div>
+<p>We will first analyze a single sample and later construct a dataset, which stores the mathematical vector representation of each sample.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="o">~</span><span class="nx">sample</span> <span class="o">=</span> <span class="o">~</span><span class="nx">sampleBuffers</span><span class="p">.</span><span class="nx">choose</span><span class="p">;</span>
+<span class="o">~</span><span class="nx">sample</span><span class="p">.</span><span class="nx">postln</span><span class="p">.</span><span class="nx">play</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Buffer(56, 46336, 1, 44100.0, /Users/scheiba/supercollider/Creative Kicks/Accoustic Kicks/Accoustic Kick 57.wav)
+-&gt; Synth(&#39;temp__1&#39; : 1001)
+</pre></div>
+</div>
+</div>
+</div>
+<p>FluCoMa offers a wide variety of information extraction tool of sonic data - for this introduction we will limit ourselves to <code class="docutils literal notranslate"><span class="pre">FluidBufSpectralShape</span></code> which extracts such information such as <em>spectral centroid</em>.</p>
+<p>As FluCoMa supports not just SuperCollider but also pd and Max MSP it is necessary to perform all FluCoMa related tasks on a format which is supported by all these frameworks which are audio signals and in particular, <em>buffers</em>.</p>
+<p>In SuperCollider, Buffers are normally used to store an audio sample, but effectively it simply represents data as a list of floating point numbers and can therefore also be used as a storage for such.</p>
+<p>Our kick drum sample is already a buffer, but the result of the FluCoMa analysis will also be stored in a Buffer - so we need to create such a buffer on our server.
+Allocating buffers on the server is a common task and because of the split between sclang as a language which tells scsynth, the server, what to perform, one needs to perform extra caution here.
+Two useful articles from the SuperCollider Documentation are therefore</p>
+<ul class="simple">
+<li><p>s.sync</p></li>
+<li><p>Interpreter vs server</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="c1">// a buffer to store the result of the spectral analysis</span>
+<span class="o">~</span><span class="nx">spectralBuffer</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">alloc</span><span class="p">(</span><span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span><span class="nx">numFrames</span><span class="o">:</span> <span class="mi">1</span><span class="p">);</span>
+
+<span class="nx">FluidBufSpectralShape</span><span class="p">.</span><span class="nx">processBlocking</span><span class="p">(</span>
+	<span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span>
+	<span class="nx">source</span><span class="o">:</span> <span class="o">~</span><span class="nx">sample</span><span class="p">,</span>
+    <span class="nx">features</span><span class="o">:</span> <span class="o">~</span><span class="nx">spectralBuffer</span><span class="p">,</span>
+<span class="p">);</span>
+
+<span class="c1">// acts as s.sync to wait for the server to catch up</span>
+<span class="o">~</span><span class="nx">spectralBuffer</span><span class="p">.</span><span class="nx">loadToFloatArray</span><span class="p">;</span>
+
+<span class="o">~</span><span class="nx">spectralBuffer</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-&gt; Buffer(490, 91, 7, 86.1328125, nil)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can take a a look at the data which was returned from FluCoMa.</p>
+<p>The buffer <code class="docutils literal notranslate"><span class="pre">~targetBuffer</span></code> contains e.g. <span class="math notranslate nohighlight">\(132\)</span> frames and <span class="math notranslate nohighlight">\(7\)</span> channels - which could be read as a excel speradsheet with <span class="math notranslate nohighlight">\(7\)</span> columns and <span class="math notranslate nohighlight">\(132\)</span> rows.
+The spectral centroid for our sample is not just calculated once for the whole sample but for each small time-window of the sample - therefore the longer the sample is, the more rows we will obtain.</p>
+<p>The <span class="math notranslate nohighlight">\(7\)</span> channels of the buffer (aka the columns) represent the different kind of analysis that <code class="docutils literal notranslate"><span class="pre">FluidBufSpectralShape</span></code> performed on the buffer, such as <em>spectral centroid</em>, <em>spectral spread</em>, … - for a complete list, please check out the documentation of FluCoMa and Wikipedia.</p>
+<div class="math notranslate nohighlight">
+\[
+B_\text{spectral}: \underbrace{n}_{\text{\#} windows} \times \underbrace{m}_{\text{\# analysis}}
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="o">~</span><span class="nx">spectralBuffer</span><span class="p">.</span><span class="nx">loadToFloatArray</span><span class="p">(</span><span class="nx">action</span><span class="o">:</span> <span class="p">{</span><span class="o">|</span><span class="nx">array</span><span class="o">|</span>
+    <span class="nx">plot</span><span class="p">.(</span><span class="nx">array</span><span class="p">.</span><span class="nx">clump</span><span class="p">(</span><span class="mi">7</span><span class="p">).</span><span class="nx">flop</span><span class="p">.</span><span class="nx">plot</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bb63a8d7d4cc475b0cd6ecaef95c29e84999fbb83209dba35020e5e82dbd79ca.png" src="../_images/bb63a8d7d4cc475b0cd6ecaef95c29e84999fbb83209dba35020e5e82dbd79ca.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: Window &quot;Plot&quot; already exists
+
+-&gt; Buffer(490, 91, 7, 86.1328125, nil)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Comare this to the amplitude plot of the actual sample.
+The moment the sample becomes silence the spectral analysis algorithm returns really different values than before: as we approach silence, it becomes more difficult for the algorithm to detect a spectral centroid.</p>
+<p>If this wouldn’t be an introduction to FluCoMa it would probably be a good idea to only run the spectral analysis where there is no silence.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="nx">plot</span><span class="p">.(</span><span class="o">~</span><span class="nx">sample</span><span class="p">.</span><span class="nx">plot</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/45d4ace5172e9ee8b6125bc9f340dee4393b7beaebfc65a12d42bf117e5f304a.png" src="../_images/45d4ace5172e9ee8b6125bc9f340dee4393b7beaebfc65a12d42bf117e5f304a.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-&gt; an Image
+</pre></div>
+</div>
+</div>
+</div>
+<p><span class="math notranslate nohighlight">\(B_\text{spctral}\)</span> has the shape of <span class="math notranslate nohighlight">\(n \times m\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is denpedent on time.
+This is not ideal because we want to representation our sample through a fixed number of parameters for each sample - and therefore our number of parameters shouldn’t be dependent of time.
+We therefore need to aggregate the value along the time dimension so the number of values that represent the sample becomes independent of the length of the sample.
+This can be done via <code class="docutils literal notranslate"><span class="pre">FluidBufStats</span></code> in FluCoMa.</p>
+<p>This will aggregate each feature dimension by creating e.g. the</p>
+<ul class="simple">
+<li><p>mean</p></li>
+<li><p>standard deviation</p></li>
+<li><p>…</p></li>
+</ul>
+<p>along its time dimension for each of the previously calculated parameters.
+Therefore the aggregated buffer will have the dimensionality of</p>
+<div class="math notranslate nohighlight">
+\[
+B_\text{stat}: \underbrace{k}_{\text{\# aggregations}} \times \underbrace{m}_{\text{\# analysis}}
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="o">~</span><span class="nx">statsBuffer</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">alloc</span><span class="p">(</span><span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">numFrames</span><span class="o">:</span> <span class="mi">1</span><span class="p">);</span>
+
+<span class="nx">FluidBufStats</span><span class="p">.</span><span class="nx">processBlocking</span><span class="p">(</span>
+    <span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span>
+    <span class="nx">source</span><span class="o">:</span> <span class="o">~</span><span class="nx">spectralBuffer</span><span class="p">,</span>
+    <span class="nx">stats</span><span class="o">:</span> <span class="o">~</span><span class="nx">statsBuffer</span>
+<span class="p">);</span>
+
+<span class="c1">// acts as s.sync to wait for the server to catch up</span>
+<span class="o">~</span><span class="nx">statsBuffer</span><span class="p">.</span><span class="nx">loadToFloatArray</span><span class="p">;</span>
+
+<span class="o">~</span><span class="nx">statsBuffer</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-&gt; Buffer(491, 7, 7, 86.1328125, nil)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Since the stats buffer is a two dimensional matrix it is still necessary to flatten this to a single vector of length <span class="math notranslate nohighlight">\(l\)</span>, so</p>
+<div class="math notranslate nohighlight">
+\[
+B_\text{flat}: km = l
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="o">~</span><span class="nx">flatBuffer</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">alloc</span><span class="p">(</span><span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">numFrames</span><span class="o">:</span> <span class="mi">1</span><span class="p">);</span>
+
+<span class="nx">FluidBufFlatten</span><span class="p">.</span><span class="nx">processBlocking</span><span class="p">(</span>
+    <span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span>
+    <span class="nx">source</span><span class="o">:</span> <span class="o">~</span><span class="nx">statsBuffer</span><span class="p">,</span>
+    <span class="nx">destination</span><span class="o">:</span> <span class="o">~</span><span class="nx">flatBuffer</span><span class="p">,</span>
+<span class="p">);</span>
+
+<span class="c1">// acts as s.sync to wait for the server to catch up</span>
+<span class="o">~</span><span class="nx">flatBuffer</span><span class="p">.</span><span class="nx">loadToFloatArray</span><span class="p">;</span>
+
+<span class="o">~</span><span class="nx">flatBuffer</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-&gt; Buffer(495, 49, 1, 86.1328125, nil)
+</pre></div>
+</div>
+</div>
+</div>
+<section id="prepare-whole-dataset">
+<h3>Prepare whole dataset<a class="headerlink" href="#prepare-whole-dataset" title="Link to this heading">#</a></h3>
+<p>Since we finished all the necessary data processing for now, the next step is to perform this analysis for every sample.
+In order to store our analysis results we will use a <code class="docutils literal notranslate"><span class="pre">FluidDataSet</span></code> which allows to store a vector under a given ID and therefore has the dimensionality of</p>
+<div class="math notranslate nohighlight">
+\[
+D_\text{dataset}: \underbrace{x}_{\text{\# samples}} \times \underbrace{l}_{\text{\# parameters}}
+\]</div>
+<p>Using the excel spreadsheet as an analogy: We will create a spreadsheet with <span class="math notranslate nohighlight">\(l\)</span> columns (one for each parameter) and <span class="math notranslate nohighlight">\(x\)</span> rows (one for each sample).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="o">~</span><span class="nx">dataset</span> <span class="o">=</span> <span class="nx">FluidDataSet</span><span class="p">(</span><span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">);</span>
+
+<span class="nx">fork</span> <span class="p">{</span>
+	<span class="c1">// reuse buffers accross analysis</span>
+	<span class="kd">var</span> <span class="nx">spectralBuf</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">alloc</span><span class="p">(</span><span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">numFrames</span><span class="o">:</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">statsBuf</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">alloc</span><span class="p">(</span><span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">numFrames</span><span class="o">:</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">flattenBuf</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">alloc</span><span class="p">(</span><span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">numFrames</span><span class="o">:</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="o">~</span><span class="nx">sampleBuffers</span><span class="p">.</span><span class="k">do</span><span class="p">({</span><span class="o">|</span><span class="nx">sampleBuffer</span><span class="p">,</span> <span class="nx">i</span><span class="o">|</span>
+
+		<span class="nx">FluidBufSpectralShape</span><span class="p">.</span><span class="nx">process</span><span class="p">(</span>
+			<span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span>
+			<span class="nx">source</span><span class="o">:</span> <span class="nx">sampleBuffer</span><span class="p">,</span>
+			<span class="nx">features</span><span class="o">:</span> <span class="nx">spectralBuf</span><span class="p">,</span>
+			<span class="nx">select</span><span class="o">:</span> <span class="p">[</span><span class="ss">\centroid</span><span class="p">,</span> <span class="ss">\spread</span><span class="p">],</span>
+		<span class="p">);</span>
+		<span class="nx">s</span><span class="p">.</span><span class="nx">sync</span><span class="p">;</span>
+
+		<span class="nx">FluidBufStats</span><span class="p">.</span><span class="nx">process</span><span class="p">(</span>
+			<span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span>
+			<span class="nx">source</span><span class="o">:</span> <span class="nx">spectralBuf</span><span class="p">,</span>
+			<span class="nx">stats</span><span class="o">:</span> <span class="nx">statsBuf</span><span class="p">,</span>
+			<span class="nx">select</span><span class="o">:</span> <span class="p">[</span><span class="ss">\mean</span><span class="p">,</span> <span class="ss">\std</span><span class="p">],</span>
+		<span class="p">);</span>
+		<span class="nx">s</span><span class="p">.</span><span class="nx">sync</span><span class="p">;</span>
+
+		<span class="nx">FluidBufFlatten</span><span class="p">.</span><span class="nx">process</span><span class="p">(</span>
+			<span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span>
+			<span class="nx">source</span><span class="o">:</span> <span class="nx">statsBuf</span><span class="p">,</span>
+			<span class="nx">destination</span><span class="o">:</span> <span class="nx">flattenBuf</span><span class="p">,</span>
+		<span class="p">);</span>
+		<span class="nx">s</span><span class="p">.</span><span class="nx">sync</span><span class="p">;</span>
+
+		<span class="o">~</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">addPoint</span><span class="p">(</span>
+			<span class="nx">identifier</span><span class="o">:</span> <span class="nx">i</span><span class="p">,</span>
+			<span class="nx">buffer</span><span class="o">:</span> <span class="nx">flattenBuf</span><span class="p">,</span>
+		<span class="p">);</span>
+	<span class="p">});</span>
+
+    <span class="c1">// free analysis buffers</span>
+    <span class="p">[</span><span class="ss">\spectralBuf</span><span class="p">,</span> <span class="ss">\statsBuf</span><span class="p">,</span> <span class="ss">\flattenBuf</span><span class="p">].</span><span class="k">do</span><span class="p">({</span><span class="o">|</span><span class="nx">b</span><span class="o">|</span> <span class="nx">b</span><span class="p">.</span><span class="nx">free</span><span class="p">;});</span>
+    
+	<span class="s2">&quot;finished processsing&quot;</span><span class="p">.</span><span class="nx">postln</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-&gt; a Routine
+</pre></div>
+</div>
+</div>
+</div>
+<p>One can use <code class="docutils literal notranslate"><span class="pre">~dataset.print</span></code> to inspect the values stored within a dataset.</p>
+</section>
+</section>
+<section id="training-the-pca">
+<h2>Training the PCA<a class="headerlink" href="#training-the-pca" title="Link to this heading">#</a></h2>
+<p>PCA is a dimensionality reduction algorithm: the basic.
+One fundamental idea here is that the algorithm solely tries to find structure within the data without telling the algorithm which kind or class of data it is currently looking at - solely the statistical properties of the seen data will be used to find a good mapping of the high-dimensional data in lower dimensions.
+One can therefore think of PCA as a tool to find the best position for a flashbulb such that the shadow of our lightened hands represent the most information possible on the canvas, such that we hopefully can translate some structure of the 3 dimensional hands onto the 2 dimensional wall.</p>
+<p>There is a fantastic video by the numberphile YouTube channel about PCA which is worth looking if you want to understand the principle behind PCA.</p>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/TJdH6rPA-TI?si=pUhCIDFPaw16Z6s3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<p>Since PCA requires a <em>standardized</em> dataset for each feature/dimension, we need to transform our given dataset in such a way.
+<em>Standarized</em> hereby means that the mean of all datapoints within one dimension must have a mean of zero and a standard deviation of 1.
+This is necessary such that our lightbulb doesn’t have to cover values between <span class="math notranslate nohighlight">\(100\)</span> and <span class="math notranslate nohighlight">\(10000\)</span> and on another dimension between <span class="math notranslate nohighlight">\(0\)</span> and <span class="math notranslate nohighlight">\(0.1\)</span>, which would make it a hard time to find a proper position to capture all nuances within the data.
+Instead all values will be located around <span class="math notranslate nohighlight">\(0\)</span>.</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<p>Given a dataset <span class="math notranslate nohighlight">\(D = \lbrace 20, 30, 70 \rbrace\)</span>.
+In order to make its mean <span class="math notranslate nohighlight">\(0\)</span> we need to shift the values of the dataset by its current mean <span class="math notranslate nohighlight">\(\mu\)</span>, so</p>
+<div class="math notranslate nohighlight">
+\[
+\mu = \frac{1}{N} \sum_{i=0}^{N} = \frac{1}{3} \left(20 + 30 + 70\right) = 40
+\]</div>
+<p>This is possible because we are not interested in the absolute values but instead in the relativity towards all other parameters.
+We are also not interested in the absolute distance between each value within our parameter dimension, so we also have to scale/unify the spread of our dataset.
+This is achived by transforming the dataset to having a standard deviation of <span class="math notranslate nohighlight">\(1\)</span>.</p>
+<p>To calculate the current standard deviation <span class="math notranslate nohighlight">\(\sigma\)</span> of our dataset we need to use</p>
+<div class="math notranslate nohighlight">
+\[
+\sigma = \sqrt{\frac{1}{N} \sum_{i=1}^{N} \left(x_i - \mu \right)^2} = \sqrt{\frac{(20-40)^2 + (30-40)^2 + (70-40)^2}{3}} = \sqrt{\frac{1400}{3}} \approx 21.6
+\]</div>
+<p>Given these two values, we now can transform our dataset via <span class="math notranslate nohighlight">\(z = \frac{x - \mu}{\sigma}\)</span> for each <span class="math notranslate nohighlight">\(x \in D\)</span>, so the new dataset becomes <span class="math notranslate nohighlight">\(D_\text{standard} \approx \lbrace -0.93, -0.46, 1.39 \rbrace\)</span>.</p>
+</div>
+<p>FluCoMa thankfully provides us a convenient way to apply this transformation to our existing dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="o">~</span><span class="nx">datasetStandardized</span> <span class="o">=</span> <span class="nx">FluidDataSet</span><span class="p">(</span><span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">);</span>
+<span class="nx">FluidStandardize</span><span class="p">(</span><span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">).</span><span class="nx">fitTransform</span><span class="p">(</span><span class="nx">sourceDataSet</span><span class="o">:</span> <span class="o">~</span><span class="nx">dataset</span><span class="p">,</span> <span class="nx">destDataSet</span><span class="o">:</span> <span class="o">~</span><span class="nx">datasetStandardized</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-&gt; FluidStandardize(1478)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Since everything is now prepared, we can now train the PCA upon our data.
+We do this by converting our existing standardized dataset of <span class="math notranslate nohighlight">\(49\)</span> dimensions to a new dataset with <span class="math notranslate nohighlight">\(2\)</span> dimensional vectors.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="o">~</span><span class="nx">datasetPca</span> <span class="o">=</span> <span class="nx">FluidDataSet</span><span class="p">(</span><span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">);</span>
+
+<span class="o">~</span><span class="nx">pca</span> <span class="o">=</span> <span class="nx">FluidPCA</span><span class="p">(</span><span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">numDimensions</span><span class="o">:</span> <span class="mi">2</span><span class="p">).</span><span class="nx">fitTransform</span><span class="p">(</span>
+	<span class="nx">sourceDataSet</span><span class="o">:</span> <span class="o">~</span><span class="nx">datasetStandardized</span><span class="p">,</span>
+	<span class="nx">destDataSet</span><span class="o">:</span> <span class="o">~</span><span class="nx">datasetPca</span><span class="p">,</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-&gt; FluidPCA(1482)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="o">~</span><span class="nx">datasetPca</span><span class="p">.</span><span class="nx">print</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-&gt; FluidDataSet(1479)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="evaluate">
+<h2>Evaluate<a class="headerlink" href="#evaluate" title="Link to this heading">#</a></h2>
+<p>Since we now converted the samples to a dataset through some analysis and converted this high dimensional space down again to two dimensions it is time to inspect the results.</p>
+<p>We can make use of the <code class="docutils literal notranslate"><span class="pre">FluidPlotter</span></code> class which helps us to inspect a given dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="c1">// this buffer stores the clicked value</span>
+
+<span class="kd">var</span> <span class="nx">clicked</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">alloc</span><span class="p">(</span><span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">numFrames</span><span class="o">:</span> <span class="mi">2</span><span class="p">);</span>
+<span class="o">~</span><span class="nx">datasetPca</span><span class="p">.</span><span class="nx">dump</span><span class="p">({</span><span class="o">|</span><span class="nx">dict</span><span class="o">|</span>
+	<span class="nx">defer</span> <span class="p">{</span>
+        <span class="c1">// adjust xmin, xmax, ymin, ymax according to your pca dataset</span>
+		<span class="nx">FluidPlotter</span><span class="p">(</span><span class="nx">dict</span><span class="o">:</span> <span class="nx">dict</span><span class="p">,</span> <span class="nx">xmin</span><span class="o">:</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="nx">xmax</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nx">ymin</span><span class="o">:</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="nx">ymax</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nx">mouseMoveAction</span><span class="o">:</span> <span class="p">{</span><span class="o">|</span><span class="nx">view</span><span class="p">,</span> <span class="nx">xPos</span><span class="p">,</span> <span class="nx">yPos</span> <span class="nx">mod</span><span class="p">,</span> <span class="nx">button</span><span class="p">,</span> <span class="nx">count</span><span class="o">|</span>
+			<span class="nx">fork</span> <span class="p">{</span>
+                <span class="c1">// set the clicked buffer to the value we received</span>
+				<span class="nx">clicked</span><span class="p">.</span><span class="nx">sendCollection</span><span class="p">(</span><span class="nx">collection</span><span class="o">:</span> <span class="p">[</span><span class="nx">xPos</span><span class="p">,</span> <span class="nx">yPos</span><span class="p">]);</span>
+				<span class="nx">s</span><span class="p">.</span><span class="nx">sync</span><span class="p">;</span>
+                <span class="c1">// get the nearest sample given the clicked position</span>
+				<span class="o">~</span><span class="nx">datasetPca</span><span class="p">.</span><span class="nx">kNearest</span><span class="p">(</span><span class="nx">buffer</span><span class="o">:</span> <span class="nx">clicked</span><span class="p">,</span> <span class="nx">k</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">action</span><span class="o">:</span> <span class="p">{</span><span class="o">|</span><span class="nx">i</span><span class="o">|</span>
+                    <span class="c1">// select the clicked sample from our sample array and play it</span>
+					<span class="o">~</span><span class="nx">samples</span><span class="p">.</span><span class="nx">select</span><span class="p">({</span><span class="o">|</span><span class="nx">buf</span><span class="o">|</span> <span class="nx">buf</span><span class="p">.</span><span class="nx">bufnum</span> <span class="o">==</span> <span class="nx">i</span><span class="p">.</span><span class="nx">asInteger</span><span class="p">}).</span><span class="nx">first</span><span class="p">.</span><span class="nx">postln</span><span class="p">.</span><span class="nx">play</span><span class="p">;</span>
+				<span class="p">});</span>
+			<span class="p">};</span>
+		<span class="p">});</span>
+	<span class="p">};</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-&gt; FluidDataSet(1479)
+</pre></div>
+</div>
+</div>
+</div>
+<section id="running-on-the-server-in-realtime">
+<h3>Running on the server in realtime<a class="headerlink" href="#running-on-the-server-in-realtime" title="Link to this heading">#</a></h3>
+<p>Currently we operated solely within the language of SuperCollider, and although this is already very nice already, this is not something which wasn’t possible prior by using Python.
+FluCoMa really shines when it operates upon a stream of live data such as audio signals, so we also want to take a look how we can use the trained PCA model on the server.</p>
+<p>Since looking up the k nearest neighbours for a given point within a dataset is a computational heavier task, we need to train a <a class="reference external" href="https://en.wikipedia.org/wiki/K-d_tree">k-d tree</a> upon our dataset to provide us an approximate but fast guess upon the neighbors for a given point.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="o">~</span><span class="nx">tree</span> <span class="o">=</span> <span class="nx">FluidKDTree</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">numNeighbours</span><span class="o">:</span> <span class="mi">1</span><span class="p">);</span>
+<span class="o">~</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fit</span><span class="p">(</span><span class="nx">dataSet</span><span class="o">:</span> <span class="o">~</span><span class="nx">datasetPca</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-&gt; FluidKDTree(1483)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The k nearest neighbor implementation of FluCoMa will return the label of the given point within the language, but since this label can also be a string, the server will instead return the coordinates of the closest matched point within the dataset since the server can not handle strings but only floats.
+In order to circumvent this restriction, it is possible to provide a <code class="docutils literal notranslate"><span class="pre">lookupDataset</span></code> to the k-d-tree on the server, which maps allows to return another float value for a matching index of both datasets.</p>
+<p>Such a dataset can be created via</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">lookupDict</span> <span class="o">=</span> <span class="nx">Dictionary</span><span class="p">.</span><span class="nx">newFrom</span><span class="p">([</span><span class="s2">&quot;cols&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="nx">Dictionary</span><span class="p">.</span><span class="k">new</span><span class="p">]);</span>
+
+<span class="o">~</span><span class="nx">datasetPca</span><span class="p">.</span><span class="nx">dump</span><span class="p">({</span><span class="o">|</span><span class="nx">d</span><span class="o">|</span>
+	<span class="nx">d</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">].</span><span class="k">do</span><span class="p">({</span><span class="o">|</span><span class="nx">k</span><span class="p">,</span> <span class="nx">v</span><span class="o">|</span>
+		<span class="nx">lookupDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="nx">v</span><span class="p">.</span><span class="nx">asString</span><span class="p">]</span> <span class="o">=</span> <span class="o">~</span><span class="nx">sampleBuffers</span><span class="p">[</span><span class="nx">v</span><span class="p">].</span><span class="nx">bufnum</span><span class="p">;</span>
+	<span class="p">});</span>
+	<span class="o">~</span><span class="nx">lookupDataset</span> <span class="o">=</span> <span class="nx">FluidDataSet</span><span class="p">(</span><span class="nx">s</span><span class="p">).</span><span class="nx">load</span><span class="p">(</span><span class="nx">dict</span><span class="o">:</span> <span class="nx">lookupDict</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-&gt; FluidDataSet(1481)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Since FluCoMa operate upon buffers, it is always necesary to convert our control values to Buffer via <code class="docutils literal notranslate"><span class="pre">FluidKrToBuf</span></code> (or vice versa via <code class="docutils literal notranslate"><span class="pre">FluidBufToKr</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="nx">Ndef</span><span class="p">(</span><span class="ss">\x</span><span class="p">,</span> <span class="p">{</span>
+    <span class="c1">// buffers to store our data passed to flucoma</span>
+	<span class="kd">var</span> <span class="nx">coordinate</span> <span class="o">=</span> <span class="nx">LocalBuf</span><span class="p">(</span><span class="nx">numFrames</span><span class="o">:</span> <span class="mi">2</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">sample</span> <span class="o">=</span> <span class="nx">LocalBuf</span><span class="p">(</span><span class="nx">numFrames</span><span class="o">:</span> <span class="mi">1</span><span class="p">);</span>
+    
+	<span class="kd">var</span> <span class="nx">numSample</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">trigger</span> <span class="o">=</span> <span class="nx">Impulse</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span><span class="ss">\speed</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span><span class="mf">2.0</span><span class="p">));</span>
+    
+	<span class="nx">FluidKrToBuf</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span>
+		<span class="nx">krStream</span><span class="o">:</span> <span class="p">[</span><span class="ss">\x</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span> <span class="ss">\y</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)],</span>
+		<span class="nx">buffer</span><span class="o">:</span> <span class="nx">coordinate</span><span class="p">,</span>
+	<span class="p">);</span>
+	<span class="o">~</span><span class="nx">tree</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span>
+		<span class="nx">trig</span><span class="o">:</span> <span class="nx">trigger</span><span class="p">,</span>
+		<span class="nx">inputBuffer</span><span class="o">:</span> <span class="nx">coordinate</span><span class="p">,</span>
+		<span class="nx">outputBuffer</span><span class="o">:</span> <span class="nx">sample</span><span class="p">,</span>
+		<span class="nx">numNeighbours</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+		<span class="nx">lookupDataSet</span><span class="o">:</span> <span class="o">~</span><span class="nx">lookupDataset</span>
+	<span class="p">);</span>
+	<span class="nx">numSample</span> <span class="o">=</span> <span class="nx">FluidBufToKr</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span>
+		<span class="nx">buffer</span><span class="o">:</span> <span class="nx">sample</span>
+	<span class="p">).</span><span class="nx">poll</span><span class="p">(</span><span class="nx">trig</span><span class="o">:</span> <span class="mf">4.0</span><span class="p">,</span><span class="nx">label</span><span class="o">:</span> <span class="ss">\sample</span><span class="p">);</span>
+	<span class="nx">PlayBuf</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span>
+		<span class="nx">numChannels</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+		<span class="nx">bufnum</span><span class="o">:</span> <span class="nx">numSample</span><span class="p">,</span>
+		<span class="nx">trigger</span><span class="o">:</span> <span class="nx">trigger</span><span class="p">,</span>
+	<span class="p">);</span>
+<span class="p">}).</span><span class="nx">play</span><span class="p">.</span><span class="nx">gui</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-&gt; a NdefGui
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="further-tasks">
+<h2>Further Tasks<a class="headerlink" href="#further-tasks" title="Link to this heading">#</a></h2>
+<p>Optional tasks which are left as exercise to the reader.</p>
+<ul class="contains-task-list simple">
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Check how the spectral analysis performs when the sample becomes silent - is this problematic? Is it possible to neglect the silent parts of the sample?</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Add such metrics such as length and amplitude</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Is the mean an actual good value for a spectral centroid? Why not?</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> How does the FFT parameters of the SpectralShape analysis affect the results?</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Use a dataset which consists of two different kind of sounds (e.g. snare and kick) - find good parameters of the pre-processing to separate those two classes. PCA will not be told what classes the sounds are from during training!</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Translating between higher and lower dimensions can be usefule to navigate through a set of presets: Create a list of presets for a given complex sound and navigate though them via PCA. What is the problem if the reduced dimension is <span class="math notranslate nohighlight">\(1\)</span>?</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> You can also use the PCA to translate (live) signals to another representation - e.g. while <code class="docutils literal notranslate"><span class="pre">FluidBufSpectralShape</span></code> operates upon buffers, there is also <code class="docutils literal notranslate"><span class="pre">FluidSpectralShape</span></code> which operates upon signals. Train a PCA model on a variety of data and use it to control the parameters of a sound through a given input source.</p></li>
+</ul>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -400,12 +969,50 @@ document.write(`
         <p class="prev-next-title">Intro</p>
       </div>
     </a>
+    <a class="right-next"
+       href="../bibliography.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Bibliography</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-project">The project</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-the-dataset">Loading the dataset</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analyze-and-represent-the-data">Analyze and represent the data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prepare-whole-dataset">Prepare whole dataset</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-the-pca">Training the PCA</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluate">Evaluate</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-on-the-server-in-realtime">Running on the server in realtime</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-tasks">Further Tasks</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
