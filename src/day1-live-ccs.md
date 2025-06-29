@@ -7,18 +7,18 @@ The Code shown here is mostly frankensteined from Todd Moores YouTube Tutorials 
 - [2D Corpus Explorer (SuperCollider)](https://www.youtube.com/watch?v=9yoAGbs2eJ8&t=36s)  
 
 
-<iframe width="988" height="556" src="https://www.youtube.com/embed/9yoAGbs2eJ8" title="2D Corpus Explorer (SuperCollider) Part 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315"  src="https://www.youtube.com/embed/9yoAGbs2eJ8" title="2D Corpus Explorer (SuperCollider) Part 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 
 - [Classifying Sounds using a Neural Network in SuperCollider](https://www.youtube.com/watch?v=Y1cHmtbQPSk)
 
 
-<iframe width="988" height="556" src="https://www.youtube.com/embed/Y1cHmtbQPSk" title="Classifying Sounds using a Neural Network in SuperCollider" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315"  src="https://www.youtube.com/embed/Y1cHmtbQPSk" title="Classifying Sounds using a Neural Network in SuperCollider" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 Motivation and inspiration was drawn from these examples aswell:  
 - [Sound Into Sound](https://learn.flucoma.org/explore/constanzo/)
 - [Corpus-Based Sampler Performance](https://www.youtube.com/watch?v=WMGHqyyn1TE)
 
-<iframe width="1054" height="556" src="https://www.youtube.com/embed/WMGHqyyn1TE" title="Corpus-Based Sampler Performance" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315"  src="https://www.youtube.com/embed/WMGHqyyn1TE" title="Corpus-Based Sampler Performance" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 
 Audio material was mainly sourced from [Musicradar](https://www.musicradar.com/news/tech/free-music-samples-royalty-free-loops-hits-and-multis-to-download-sampleradar).
