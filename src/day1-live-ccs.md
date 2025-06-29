@@ -152,7 +152,8 @@ fork{
 This can surely be improved upon, but note that `FluidBufOnsetSlice` doesn't care about zero-crossings. This can later lead to clicks and pops when playing a segment of the buffer `~src` without an envelope.  
 Wavesets introduces a whole new set of options for the playback of audio buffers aswell, which will be explored in later projects.  
 
-```{note} highpass
+```{admonition} highpass
+:class: note
 The quality of a wavesets analysis can be improved by applying a highpass-filter to your audio source material (see [*ffmpeg*](ffmpeg)) and stripping silence (see [*Stripping silence*](strip)).
 ```
 
@@ -255,7 +256,8 @@ Now that we have segmented the `~src` we will analyze it slice by slice for MFCC
 )
 ```
 
-```{error} running out of buffers
+```{admonition} running out of buffers
+:class: error
 When you're running out of buffers during this process, you need to reboot the server with a higher number of `s.options.numBuffers` (see [Sample library preparation](prepare_sample)) and repeat all previous steps.
 ```
 
@@ -340,7 +342,7 @@ if(dataPath.pathExists == \folder) {
 
 After you've made sure the backup process works, you can basically delete the files that you've converted and collected, assuming they are a copy of an original.  
 
-```{note} discussion
+```{hint}
 Some will say that writing backup files like this is not preferable. Instead we should have separate SuperCollider code for each analysis result we want to come back to, in order to keep things stateless. This implies that we will have to repeat the whole analysis each time before we can start making music. 
 ```
 
