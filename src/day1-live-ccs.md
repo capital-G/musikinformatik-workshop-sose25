@@ -14,6 +14,7 @@ The Code shown here is mostly frankensteined from Todd Moores YouTube Tutorials 
 
 
 <iframe width="560" height="315"  src="https://www.youtube.com/embed/Y1cHmtbQPSk" title="Classifying Sounds using a Neural Network in SuperCollider" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 Motivation and inspiration was drawn from these examples aswell:  
 - [Sound Into Sound](https://learn.flucoma.org/explore/constanzo/)
 - [Corpus-Based Sampler Performance](https://www.youtube.com/watch?v=WMGHqyyn1TE)
