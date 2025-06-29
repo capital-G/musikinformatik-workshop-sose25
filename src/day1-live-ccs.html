@@ -1,0 +1,1051 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Day 1 - Realtime CCS &#8212; Musikinformatik Workshop SoSe25</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'src/day1-live-ccs';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Bibliography" href="../bibliography.html" />
+    <link rel="prev" title="Day 1 - Introduction to FluCoMa" href="day1-flucoma.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Musikinformatik Workshop SoSe25 - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Musikinformatik Workshop SoSe25 - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Intro
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="day1-flucoma.html">Day 1 - Introduction to FluCoMa</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Day 1 - Realtime CCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">Bibliography</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/capital-G/musikinformatik-workshop-sose25" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/src/day1-live-ccs.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Day 1 - Realtime CCS</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-library-preparation">1. Sample library preparation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#segmentation">Segmentation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stripping-silence-optional">Stripping silence (optional)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wavesets-optional">Wavesets (optional)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spectral-analysis">2. Spectral analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#backup-optional">3. Backup (optional)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#saving">Saving</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loading">Loading</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synthesis-preparations">4. Synthesis preparations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#envelopes">Envelopes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#synths">Synths</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#realtime-analysis-functions">realtime analysis functions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#live">5. Live</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ffmpeg-optional">6. ffmpeg (optional)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#easy-ffmpeg-sample-rate-conversion">Easy ffmpeg sample rate conversion:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#with-hiphpass-filter">… with hiphpass filter:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#and-normalization">… and normalization:</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="day-1-realtime-ccs">
+<h1>Day 1 - Realtime CCS<a class="headerlink" href="#day-1-realtime-ccs" title="Link to this heading">#</a></h1>
+<p>The methods shown here are one way of realizing <a class="reference external" href="https://www.ircam.fr/projects/pages/synthese-concatenative-par-corpus">real-time <em>corpus based concatenative synthesis</em></a> in SuperCollider using the <a class="reference external" href="https://www.flucoma.org/">FluCoMa</a> Toolchain.</p>
+<p>The Code shown here is mostly frankensteined from Todd Moores YouTube Tutorials on the <a class="reference external" href="https://www.youtube.com/&#64;FluidCorpusManipulation">FluCoMa YT Channel</a>:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.youtube.com/watch?v=9yoAGbs2eJ8&amp;amp;t=36s">2D Corpus Explorer (SuperCollider)</a></p></li>
+</ul>
+<iframe width="560" height="315"  src="https://www.youtube.com/embed/9yoAGbs2eJ8" title="2D Corpus Explorer (SuperCollider) Part 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.youtube.com/watch?v=Y1cHmtbQPSk">Classifying Sounds using a Neural Network in SuperCollider</a></p></li>
+</ul>
+<iframe width="560" height="315"  src="https://www.youtube.com/embed/Y1cHmtbQPSk" title="Classifying Sounds using a Neural Network in SuperCollider" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<p>Motivation and inspiration was drawn from these examples aswell:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://learn.flucoma.org/explore/constanzo/">Sound Into Sound</a></p></li>
+<li><p><a class="reference external" href="https://www.youtube.com/watch?v=WMGHqyyn1TE">Corpus-Based Sampler Performance</a></p></li>
+</ul>
+<iframe width="560" height="315"  src="https://www.youtube.com/embed/WMGHqyyn1TE" title="Corpus-Based Sampler Performance" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<p>Audio material was mainly sourced from <a class="reference external" href="https://www.musicradar.com/news/tech/free-music-samples-royalty-free-loops-hits-and-multis-to-download-sampleradar">Musicradar</a>.</p>
+<section id="sample-library-preparation">
+<span id="prepare-sample"></span><h2>1. Sample library preparation<a class="headerlink" href="#sample-library-preparation" title="Link to this heading">#</a></h2>
+<p>First we have to choose a folder of samples that we will use as reference material. This directory <code class="docutils literal notranslate"><span class="pre">~folder</span></code> (and it’s sub-direcotries) should contain a variety of qualitatively different audio material in the same samplerate.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">FluidBufCompose</span></code> does not interpolate, when writing the audio into a buffer consecutively. Non-matching samplerates will lead to a deviation in playback-rate and thus pitch and length.</p>
+</div>
+<p>In the next step, this material is summed to mono and written to a single Buffer <code class="docutils literal notranslate"><span class="pre">~src</span></code> which will first be segmented by onset detection and then analysed for certain spectral features.</p>
+<p>It makes sense to use a single buffer in this specific use case. If you are working with a library of files that each contain single percussive hits, a different approach is needed.</p>
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="c1">// choose a directory of samples</span>
+<span class="o">~</span><span class="nx">folder</span> <span class="o">=</span> <span class="s2">&quot;/path/to/sample/directory/&quot;</span><span class="p">;</span>
+
+<span class="c1">// to avoid running out of buffers </span>
+<span class="nx">s</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">numBuffers</span> <span class="o">=</span> <span class="mi">4096</span><span class="p">;</span>
+<span class="nx">s</span><span class="p">.</span><span class="nx">boot</span><span class="p">;</span>
+
+<span class="c1">// load into a buffer</span>
+<span class="o">~</span><span class="nx">loader</span> <span class="o">=</span> <span class="nx">FluidLoadFolder</span><span class="p">(</span><span class="o">~</span><span class="nx">folder</span><span class="p">).</span><span class="nx">play</span><span class="p">(</span><span class="nx">s</span><span class="p">,{</span><span class="s2">&quot;done loading folder&quot;</span><span class="p">.</span><span class="nx">postln</span><span class="p">});</span>
+
+<span class="c1">// sum to mono (if not mono)</span>
+<span class="p">(</span>
+<span class="k">if</span><span class="p">(</span><span class="o">~</span><span class="nx">loader</span><span class="p">.</span><span class="nx">buffer</span><span class="p">.</span><span class="nx">numChannels</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">){</span>
+	<span class="o">~</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+	<span class="o">~</span><span class="nx">loader</span><span class="p">.</span><span class="nx">buffer</span><span class="p">.</span><span class="nx">numChannels</span><span class="p">.</span><span class="k">do</span><span class="p">{</span>
+		<span class="kd">arg</span> <span class="nx">chan_i</span><span class="p">;</span>
+		<span class="nx">FluidBufCompose</span><span class="p">.</span><span class="nx">processBlocking</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span>
+			<span class="o">~</span><span class="nx">loader</span><span class="p">.</span><span class="nx">buffer</span><span class="p">,</span>
+			<span class="nx">startChan</span><span class="o">:</span> <span class="nx">chan_i</span><span class="p">,</span>
+			<span class="nx">numChans</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+			<span class="nx">gain</span><span class="o">:</span> <span class="o">~</span><span class="nx">loader</span><span class="p">.</span><span class="nx">buffer</span><span class="p">.</span><span class="nx">numChannels</span><span class="p">.</span><span class="nx">reciprocal</span><span class="p">,</span>
+			<span class="nx">destination</span><span class="o">:</span> <span class="o">~</span><span class="nx">src</span><span class="p">,</span>
+			<span class="nx">destGain</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+			<span class="nx">action</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;copied channel: %&quot;</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="nx">chan_i</span><span class="p">).</span><span class="nx">postln</span><span class="p">}</span>
+		<span class="p">);</span>
+	<span class="p">};</span>
+<span class="p">}{</span>
+	<span class="s2">&quot;loader buffer is already mono&quot;</span><span class="p">.</span><span class="nx">postln</span><span class="p">;</span>
+	<span class="o">~</span><span class="nx">src</span> <span class="o">=</span> <span class="o">~</span><span class="nx">loader</span><span class="p">.</span><span class="nx">buffer</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<section id="segmentation">
+<span id="segment"></span><h3>Segmentation<a class="headerlink" href="#segmentation" title="Link to this heading">#</a></h3>
+<p>Next we will segment the newly created audiobuffer <code class="docutils literal notranslate"><span class="pre">~src</span></code> by onset detection and save the result in another buffer <code class="docutils literal notranslate"><span class="pre">~indices</span></code>.<br />
+Confusion can arise  here because to SuperCollider users, buffers are commonly used for storing audio data only. Here we start using them for storing analysis data instead.</p>
+<p>The parameters of <code class="docutils literal notranslate"><span class="pre">FluidBufOnsetSlice</span></code> used here are tweaked to my library and read the <a class="reference external" href="https://learn.flucoma.org/reference/onsetslice/">FluCoMa documentation for Onset Slicing</a>  for a better understanding of the different metrics.</p>
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="c1">// slice the buffer in non real-time</span>
+<span class="p">(</span>
+<span class="o">~</span><span class="nx">indices</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+<span class="nx">FluidBufOnsetSlice</span><span class="p">.</span><span class="nx">processBlocking</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span>
+	<span class="nx">source</span><span class="o">:</span> <span class="o">~</span><span class="nx">src</span><span class="p">,</span>
+	<span class="nx">metric</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+	<span class="nx">threshold</span><span class="o">:</span> <span class="mf">0.2</span><span class="p">,</span> 
+	<span class="nx">minSliceLength</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span>
+	<span class="nx">windowSize</span><span class="o">:</span> <span class="mi">512</span><span class="p">,</span>
+	<span class="nx">indices</span><span class="o">:</span> <span class="o">~</span><span class="nx">indices</span><span class="p">,</span>
+	<span class="nx">action</span><span class="o">:</span><span class="p">{</span>
+		<span class="s2">&quot;found % slice points&quot;</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="o">~</span><span class="nx">indices</span><span class="p">.</span><span class="nx">numFrames</span><span class="p">).</span><span class="nx">postln</span><span class="p">;</span>
+		<span class="s2">&quot;average duration per slice: %&quot;</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="o">~</span><span class="nx">src</span><span class="p">.</span><span class="nx">duration</span> <span class="o">/</span> <span class="p">(</span><span class="o">~</span><span class="nx">indices</span><span class="p">.</span><span class="nx">numFrames</span><span class="o">+</span><span class="mi">1</span><span class="p">)).</span><span class="nx">postln</span><span class="p">;</span>
+<span class="p">});</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>I have tweaked these values here to achieve an<code class="docutils literal notranslate"><span class="pre">average</span> <span class="pre">duration</span> <span class="pre">per</span> <span class="pre">slice</span></code> of about 0.2 Seconds and so that the number of slice points strongly exceeds the number of samples provided. This depends on the desired result of course.<br />
+<em>My output</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">found</span> <span class="mi">2840</span> <span class="nb">slice</span> <span class="n">points</span>
+<span class="n">average</span> <span class="n">duration</span> <span class="n">per</span> <span class="nb">slice</span><span class="p">:</span> <span class="mf">0.22336125043999</span>
+</pre></div>
+</div>
+</section>
+<section id="stripping-silence-optional">
+<span id="strip"></span><h3>Stripping silence (optional)<a class="headerlink" href="#stripping-silence-optional" title="Link to this heading">#</a></h3>
+<p>Depending on the material, it could be advantageous to remove silence (or rather “very low amplitude noise”) from the buffer, as it will alter the spectral analysis aswell as the (optional) wavesets analysis.</p>
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
+<span class="nx">fork</span><span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">indices</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">temp</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+
+	<span class="nx">FluidBufAmpGate</span><span class="p">.</span><span class="nx">processBlocking</span><span class="p">(</span>
+		<span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span>
+		<span class="nx">source</span><span class="o">:</span> <span class="o">~</span><span class="nx">src</span><span class="p">,</span>
+		<span class="nx">indices</span><span class="o">:</span><span class="nx">indices</span><span class="p">,</span>
+		<span class="nx">onThreshold</span><span class="o">:-</span><span class="mi">50</span><span class="p">,</span>
+		<span class="nx">offThreshold</span><span class="o">:-</span><span class="mi">55</span><span class="p">,</span>
+		<span class="nx">minSliceLength</span><span class="o">:</span><span class="mi">2400</span>
+	<span class="p">);</span>
+	<span class="nx">s</span><span class="p">.</span><span class="nx">sync</span><span class="p">;</span>
+
+	<span class="nx">indices</span><span class="p">.</span><span class="nx">loadToFloatArray</span><span class="p">(</span><span class="nx">action</span><span class="o">:</span><span class="p">{</span> <span class="o">|</span><span class="nx">fa</span><span class="o">|</span>
+		<span class="kd">var</span> <span class="nx">curr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+		<span class="nx">fa</span><span class="p">.</span><span class="nx">clump</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="k">do</span><span class="p">({</span> <span class="o">|</span><span class="nx">arr</span><span class="p">,</span><span class="nx">index</span><span class="o">|</span>
+			<span class="kd">var</span> <span class="nx">start</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+			<span class="kd">var</span> <span class="nx">num</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="nx">start</span><span class="p">;</span>
+			<span class="nx">FluidBufCompose</span><span class="p">.</span><span class="nx">processBlocking</span><span class="p">(</span><span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span>
+				<span class="nx">source</span><span class="o">:</span> <span class="o">~</span><span class="nx">src</span><span class="p">,</span>
+				<span class="nx">startFrame</span><span class="o">:</span> <span class="nx">start</span><span class="p">,</span>
+				<span class="nx">numFrames</span><span class="o">:</span> <span class="nx">num</span><span class="p">,</span>
+				<span class="nx">destination</span><span class="o">:</span> <span class="nx">temp</span><span class="p">,</span>
+				<span class="nx">destStartFrame</span><span class="o">:</span> <span class="nx">curr</span>
+			<span class="p">);</span>
+			<span class="nx">curr</span> <span class="o">=</span> <span class="nx">curr</span> <span class="o">+</span> <span class="nx">num</span><span class="p">;</span>
+			<span class="nx">s</span><span class="p">.</span><span class="nx">sync</span><span class="p">;</span>
+			<span class="s2">&quot;% / %\n&quot;</span><span class="p">.</span><span class="nx">postf</span><span class="p">(</span><span class="nx">index</span><span class="o">+</span><span class="mi">1</span><span class="p">,(</span><span class="nx">fa</span><span class="p">.</span><span class="nx">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">).</span><span class="nx">asInteger</span><span class="p">);</span>
+		<span class="p">});</span>
+		<span class="nx">indices</span><span class="p">.</span><span class="nx">free</span><span class="p">;</span>
+	<span class="p">});</span>
+	<span class="s2">&quot;Done stripping % samples!\n&quot;</span><span class="p">.</span><span class="nx">postf</span><span class="p">(</span><span class="o">~</span><span class="nx">src</span><span class="p">.</span><span class="nx">numFrames</span> <span class="o">-</span> <span class="nx">temp</span><span class="p">.</span><span class="nx">numFrames</span><span class="p">);</span>
+	<span class="o">~</span><span class="nx">src</span><span class="p">.</span><span class="nx">free</span><span class="p">;</span>
+	<span class="o">~</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">temp</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="wavesets-optional">
+<span id="wavesets"></span><h3>Wavesets (optional)<a class="headerlink" href="#wavesets-optional" title="Link to this heading">#</a></h3>
+<p>This can surely be improved upon, but note that <code class="docutils literal notranslate"><span class="pre">FluidBufOnsetSlice</span></code> doesn’t care about zero-crossings. This can later lead to clicks and pops when playing a segment of the buffer <code class="docutils literal notranslate"><span class="pre">~src</span></code> without an envelope.<br />
+Wavesets introduces a whole new set of options for the playback of audio buffers aswell, which will be explored in later projects.</p>
+<div class="note admonition">
+<p class="admonition-title">highpass</p>
+<p>The quality of a wavesets analysis can be improved by applying a highpass-filter to your audio source material (see <a class="reference internal" href="#ffmpeg"><span class="std std-ref"><em>ffmpeg</em></span></a>) and stripping silence (see <a class="reference internal" href="#strip"><span class="std std-ref"><em>Stripping silence</em></span></a>).</p>
+</div>
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm">// install WavesetsEvent if you haven&#39;t already  </span>
+<span class="cm">Quarks.install(&quot;WavesetsEvent&quot;);</span>
+<span class="cm">*/</span>
+<span class="p">(</span>
+<span class="o">~</span><span class="nx">waveset</span> <span class="o">=</span> <span class="nx">WavesetsEvent</span><span class="p">.</span><span class="k">new</span><span class="p">;</span>
+<span class="o">~</span><span class="nx">waveset</span><span class="p">.</span><span class="nx">setBuffer</span><span class="p">(</span><span class="o">~</span><span class="nx">src</span><span class="p">,</span> <span class="nx">minLength</span><span class="o">:</span><span class="mi">10</span><span class="p">);</span>
+<span class="p">)</span>
+
+<span class="p">(</span>
+<span class="kd">var</span> <span class="nx">arr</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">newIndices</span><span class="p">;</span>
+
+<span class="o">~</span><span class="nx">indices</span><span class="p">.</span><span class="nx">loadToFloatArray</span><span class="p">(</span><span class="nx">action</span><span class="o">:</span> <span class="p">{</span><span class="o">|</span><span class="nx">fa</span><span class="o">|</span>
+	<span class="nx">defer</span> <span class="p">{</span>
+		<span class="nx">arr</span> <span class="o">=</span> <span class="nx">fa</span><span class="p">.</span><span class="nx">collect</span><span class="p">{</span><span class="o">|</span><span class="nx">frame</span><span class="o">|</span>
+			<span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="o">~</span><span class="nx">waveset</span><span class="p">.</span><span class="nx">wavesets</span><span class="p">.</span><span class="nx">nextStartCrossingIndex</span><span class="p">(</span><span class="nx">frame</span><span class="p">);</span>
+			<span class="o">~</span><span class="nx">waveset</span><span class="p">.</span><span class="nx">wavesets</span><span class="p">.</span><span class="nx">xings</span><span class="p">.</span><span class="nx">clipAt</span><span class="p">(</span><span class="nx">i</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+		<span class="p">};</span>
+
+		<span class="nx">arr</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">keep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">++</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">select</span><span class="p">{</span><span class="o">|</span><span class="nx">x</span><span class="p">,</span><span class="nx">i</span><span class="o">|</span>
+			<span class="kd">var</span> <span class="nx">prev</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">clipAt</span><span class="p">(</span><span class="nx">i</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+			<span class="p">(</span><span class="nx">x</span> <span class="o">!=</span> <span class="nx">prev</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">x</span> <span class="o">&gt;</span> <span class="nx">prev</span><span class="p">)</span>
+		<span class="p">};</span>
+
+		<span class="nx">fork</span> <span class="p">{</span>
+			<span class="nx">newIndices</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">sendCollection</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">arr</span><span class="p">);</span>
+			<span class="nx">s</span><span class="p">.</span><span class="nx">sync</span><span class="p">;</span>
+			<span class="o">~</span><span class="nx">indices</span><span class="p">.</span><span class="nx">free</span><span class="p">;</span>
+			<span class="o">~</span><span class="nx">indices</span> <span class="o">=</span> <span class="nx">newIndices</span><span class="p">;</span>
+			<span class="nx">s</span><span class="p">.</span><span class="nx">sync</span><span class="p">;</span>
+		<span class="p">};</span>
+		<span class="nx">arr</span><span class="p">[..</span><span class="mi">9</span><span class="p">].</span><span class="k">do</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">postln</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">})</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="spectral-analysis">
+<span id="spectral"></span><h2>2. Spectral analysis<a class="headerlink" href="#spectral-analysis" title="Link to this heading">#</a></h2>
+<p>Now that we have segmented the <code class="docutils literal notranslate"><span class="pre">~src</span></code> we will analyze it slice by slice for MFCC features and then perform some statistical analysis on these features:</p>
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
+<span class="o">~</span><span class="nx">dataset</span> <span class="o">=</span> <span class="nx">FluidDataSet</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+
+<span class="o">~</span><span class="nx">indices</span><span class="p">.</span><span class="nx">loadToFloatArray</span><span class="p">(</span> <span class="nx">action</span><span class="o">:</span> <span class="p">{</span> <span class="o">|</span><span class="nx">fa</span><span class="o">|</span>
+	<span class="nx">fa</span><span class="p">.</span><span class="nx">doAdjacentPairs</span><span class="p">{</span> <span class="o">|</span><span class="nx">start</span><span class="p">,</span> <span class="nx">end</span><span class="p">,</span> <span class="nx">i</span><span class="o">|</span>
+		<span class="kd">var</span> <span class="nx">featuresBuffer</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+		<span class="kd">var</span> <span class="nx">flatBuffer</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">meanMFCC</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+
+		<span class="c1">// Extract MFCCs for this segment</span>
+		<span class="nx">FluidBufMFCC</span><span class="p">.</span><span class="nx">processBlocking</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span>
+			<span class="c1">// source: ~src,</span>
+			<span class="nx">source</span><span class="o">:</span> <span class="o">~</span><span class="nx">src</span><span class="p">,</span>
+			<span class="nx">startFrame</span><span class="o">:</span> <span class="nx">start</span><span class="p">,</span>
+			<span class="nx">numFrames</span><span class="o">:</span> <span class="nx">end</span> <span class="o">-</span> <span class="nx">start</span><span class="p">,</span>
+			<span class="nx">features</span><span class="o">:</span> <span class="nx">featuresBuffer</span><span class="p">,</span>
+			<span class="nx">numCoeffs</span><span class="o">:</span> <span class="mi">13</span><span class="p">,</span>
+			<span class="nx">startCoeff</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+			<span class="nx">minFreq</span><span class="o">:</span> <span class="mi">30</span><span class="p">,</span>
+			<span class="nx">maxFreq</span><span class="o">:</span> <span class="mi">16000</span><span class="p">,</span>
+			<span class="nx">windowSize</span><span class="o">:</span> <span class="mi">512</span><span class="p">,</span>
+		<span class="p">);</span>
+
+		<span class="c1">// Convert MFCCs to a single feature vector (mean across frames)</span>
+		<span class="nx">FluidBufStats</span><span class="p">.</span><span class="nx">processBlocking</span><span class="p">(</span>
+			<span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span>
+			<span class="nx">source</span><span class="o">:</span> <span class="nx">featuresBuffer</span><span class="p">,</span>
+			<span class="nx">select</span><span class="o">:</span> <span class="p">[</span><span class="ss">\mean</span><span class="p">],</span>
+			<span class="nx">stats</span><span class="o">:</span> <span class="nx">meanMFCC</span><span class="p">,</span>
+		<span class="p">);</span>
+		<span class="nx">FluidBufFlatten</span><span class="p">.</span><span class="nx">processBlocking</span><span class="p">(</span>
+			<span class="nx">server</span><span class="o">:</span> <span class="nx">s</span><span class="p">,</span>
+			<span class="nx">source</span><span class="o">:</span> <span class="nx">meanMFCC</span><span class="p">,</span>
+			<span class="nx">destination</span><span class="o">:</span> <span class="nx">flatBuffer</span><span class="p">,</span>
+		<span class="p">);</span>
+
+        <span class="c1">// add this point to the dataset</span>
+		<span class="o">~</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">addPoint</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="nx">flatBuffer</span><span class="p">);</span>
+
+        <span class="c1">// free the buffers</span>
+		<span class="nx">featuresBuffer</span><span class="p">.</span><span class="nx">free</span><span class="p">;</span>
+		<span class="nx">flatBuffer</span><span class="p">.</span><span class="nx">free</span><span class="p">;</span>
+		<span class="nx">meanMFCC</span><span class="p">.</span><span class="nx">free</span><span class="p">;</span>
+
+		<span class="s2">&quot;% / %\n&quot;</span><span class="p">.</span><span class="nx">postf</span><span class="p">(</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nx">fa</span><span class="p">.</span><span class="nx">size</span><span class="p">);</span>
+        <span class="c1">// if you get warnings in the output,</span>
+        <span class="c1">// you can decrease this number to sync more often</span>
+		<span class="k">if</span><span class="p">(</span><span class="nx">i</span><span class="o">%</span><span class="mi">5</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span><span class="nx">s</span><span class="p">.</span><span class="nx">sync</span><span class="p">}</span>
+	<span class="p">};</span>
+	<span class="nx">s</span><span class="p">.</span><span class="nx">sync</span><span class="p">;</span>
+	<span class="o">~</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">print</span><span class="p">;</span>
+<span class="p">});</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="error admonition">
+<p class="admonition-title">running out of buffers</p>
+<p>When you’re running out of buffers during this process, you need to reboot the server with a higher number of <code class="docutils literal notranslate"><span class="pre">s.options.numBuffers</span></code> (see <a class="reference internal" href="#prepare-sample"><span class="std std-ref">Sample library preparation</span></a>) and repeat all previous steps.</p>
+</div>
+<p>Now that we have created our <code class="docutils literal notranslate"><span class="pre">~dataset</span></code>, we need to fit a  <code class="docutils literal notranslate"><span class="pre">FluidKDTree</span></code>:</p>
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="o">~</span><span class="nx">kdtree</span> <span class="o">=</span> <span class="nx">FluidKDTree</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+<span class="o">~</span><span class="nx">kdtree</span><span class="p">.</span><span class="nx">fit</span><span class="p">(</span><span class="o">~</span><span class="nx">dataset</span><span class="p">,</span> <span class="nx">action</span><span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;KDTree ready!&quot;</span><span class="p">.</span><span class="nx">postln</span><span class="p">;</span> <span class="p">});</span>
+</pre></div>
+</div>
+</section>
+<section id="backup-optional">
+<span id="backup"></span><h2>3. Backup (optional)<a class="headerlink" href="#backup-optional" title="Link to this heading">#</a></h2>
+<p>Now it could make sense to create a backup of our <code class="docutils literal notranslate"><span class="pre">~dataset</span></code> and the buffers <code class="docutils literal notranslate"><span class="pre">~src</span></code> and <code class="docutils literal notranslate"><span class="pre">~indices</span></code>.</p>
+<section id="saving">
+<span id="save"></span><h3>Saving<a class="headerlink" href="#saving" title="Link to this heading">#</a></h3>
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="c1">// Back up analysis data</span>
+<span class="p">(</span>
+<span class="kd">var</span> <span class="nx">version</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">folderName</span> <span class="o">=</span> <span class="nx">PathName</span><span class="p">(</span><span class="o">~</span><span class="nx">folder</span><span class="p">).</span><span class="nx">folderName</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">parent</span> <span class="o">=</span> <span class="nx">PathName</span><span class="p">(</span><span class="o">~</span><span class="nx">folder</span><span class="p">).</span><span class="nx">parentPath</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">dataPath</span> <span class="o">=</span> <span class="nx">parent</span> <span class="o">++</span> <span class="nx">folderName</span> <span class="o">++</span> <span class="s2">&quot;_data/&quot;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">datasetPath</span> <span class="o">=</span> <span class="nx">PathName</span><span class="p">(</span><span class="nx">dataPath</span> <span class="o">++</span> <span class="s2">&quot;dataset_&quot;</span> <span class="o">++</span> <span class="nx">folderName</span> <span class="o">++</span> <span class="s2">&quot;_v&quot;</span> <span class="o">++</span> <span class="nx">version</span> <span class="o">++</span> <span class="s2">&quot;.json&quot;</span><span class="p">).</span><span class="nx">fullPath</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">sourcePath</span> <span class="o">=</span> <span class="nx">PathName</span><span class="p">(</span><span class="nx">dataPath</span> <span class="o">++</span> <span class="s2">&quot;source_&quot;</span> <span class="o">++</span> <span class="nx">folderName</span> <span class="o">++</span> <span class="s2">&quot;_v&quot;</span> <span class="o">++</span> <span class="nx">version</span> <span class="o">++</span> <span class="s2">&quot;.wav&quot;</span><span class="p">).</span><span class="nx">fullPath</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">indicesPath</span> <span class="o">=</span> <span class="nx">PathName</span><span class="p">(</span><span class="nx">dataPath</span> <span class="o">++</span> <span class="s2">&quot;indices_&quot;</span> <span class="o">++</span> <span class="nx">folderName</span> <span class="o">++</span> <span class="s2">&quot;_v&quot;</span> <span class="o">++</span> <span class="nx">version</span> <span class="o">++</span> <span class="s2">&quot;.wav&quot;</span><span class="p">).</span><span class="nx">fullPath</span><span class="p">;</span>
+
+<span class="c1">// create directory</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">dataPath</span><span class="p">.</span><span class="nx">pathExists</span> <span class="o">==</span> <span class="ss">\folder</span><span class="p">)</span> <span class="p">{</span>
+	<span class="s2">&quot;dataPath exists&quot;</span><span class="p">.</span><span class="nx">postln</span><span class="p">;</span>
+<span class="p">}</span> <span class="p">{</span> <span class="nx">dataPath</span><span class="p">.</span><span class="nx">makeDir</span><span class="p">;</span> <span class="s2">&quot;dataPath created&quot;</span><span class="p">.</span><span class="nx">postln</span> <span class="p">};</span>
+
+<span class="c1">// back up dataset</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">datasetPath</span><span class="p">.</span><span class="nx">pathExists</span> <span class="o">==</span> <span class="ss">\file</span><span class="p">)</span> <span class="p">{</span>
+	<span class="s2">&quot;this version of the dataset file already exists! Skipping …&quot;</span><span class="p">.</span><span class="nx">postln</span><span class="p">;</span>
+<span class="p">}</span> <span class="p">{</span> 
+    <span class="o">~</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">datasetPath</span><span class="p">,</span> <span class="nx">action</span><span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;Backup of ~dataset created!&quot;</span><span class="p">.</span><span class="nx">postln</span><span class="p">;</span> <span class="p">});</span> 
+<span class="p">};</span>
+
+<span class="c1">// back up soundfile</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">sourcePath</span><span class="p">.</span><span class="nx">pathExists</span> <span class="o">==</span> <span class="ss">\file</span><span class="p">)</span> <span class="p">{</span>
+	<span class="s2">&quot;this version of the source file already exists! Skipping …&quot;</span><span class="p">.</span><span class="nx">postln</span><span class="p">;</span>
+<span class="p">}</span> <span class="p">{</span> 
+    <span class="o">~</span><span class="nx">src</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">sourcePath</span><span class="p">,</span> <span class="s2">&quot;wav&quot;</span><span class="p">,</span> <span class="nx">completionMessage</span><span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;Backup of ~src created!&quot;</span><span class="p">.</span><span class="nx">postln</span><span class="p">;</span> <span class="p">})</span> 
+<span class="p">};</span>
+
+<span class="c1">// back up index array</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">indicesPath</span><span class="p">.</span><span class="nx">pathExists</span> <span class="o">==</span> <span class="ss">\file</span><span class="p">)</span> <span class="p">{</span>
+	<span class="s2">&quot;this version of the indices file already exists! Skipping …&quot;</span><span class="p">.</span><span class="nx">postln</span><span class="p">;</span>
+<span class="p">}</span> <span class="p">{</span> 
+    <span class="o">~</span><span class="nx">indices</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">indicesPath</span><span class="p">,</span> <span class="s2">&quot;wav&quot;</span><span class="p">,</span> <span class="nx">completionMessage</span><span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;Backup of ~indices created!&quot;</span><span class="p">.</span><span class="nx">postln</span><span class="p">;</span> <span class="p">})</span> 
+<span class="p">};</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="loading">
+<span id="load"></span><h3>Loading<a class="headerlink" href="#loading" title="Link to this heading">#</a></h3>
+<p>From now on, our newly created backup can be loaded as follows:</p>
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="c1">// in the future you can start from here:</span>
+<span class="o">~</span><span class="nx">folder</span> <span class="o">=</span> <span class="s2">&quot;/path/to/sample/directory_data/&quot;</span><span class="p">;</span>
+
+<span class="p">(</span>
+<span class="c1">// load data</span>
+<span class="kd">var</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">version</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">dataPath</span> <span class="o">=</span> <span class="nx">PathName</span><span class="p">(</span><span class="o">~</span><span class="nx">folder</span><span class="p">).</span><span class="nx">fullPath</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">folderName</span> <span class="o">=</span> <span class="nx">PathName</span><span class="p">(</span><span class="o">~</span><span class="nx">folder</span><span class="p">).</span><span class="nx">folderName</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="nx">$_</span><span class="p">).</span><span class="nx">first</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">datasetPath</span> <span class="o">=</span> <span class="nx">PathName</span><span class="p">(</span><span class="nx">dataPath</span> <span class="o">++</span> <span class="s2">&quot;dataset_&quot;</span> <span class="o">++</span> <span class="nx">folderName</span> <span class="o">++</span> <span class="s2">&quot;_&quot;</span> <span class="o">++</span> <span class="nx">version</span> <span class="o">++</span> <span class="s2">&quot;.json&quot;</span><span class="p">).</span><span class="nx">fullPath</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">sourcePath</span> <span class="o">=</span> <span class="nx">PathName</span><span class="p">(</span><span class="nx">dataPath</span> <span class="o">++</span> <span class="s2">&quot;source_&quot;</span> <span class="o">++</span> <span class="nx">folderName</span> <span class="o">++</span> <span class="s2">&quot;_&quot;</span> <span class="o">++</span> <span class="nx">version</span> <span class="o">++</span> <span class="s2">&quot;.wav&quot;</span><span class="p">).</span><span class="nx">fullPath</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">indicesPath</span> <span class="o">=</span> <span class="nx">PathName</span><span class="p">(</span><span class="nx">dataPath</span> <span class="o">++</span> <span class="s2">&quot;indices_&quot;</span> <span class="o">++</span> <span class="nx">folderName</span> <span class="o">++</span> <span class="s2">&quot;_&quot;</span> <span class="o">++</span> <span class="nx">version</span> <span class="o">++</span> <span class="s2">&quot;.wav&quot;</span><span class="p">).</span><span class="nx">fullPath</span><span class="p">;</span>
+
+<span class="k">if</span><span class="p">(</span><span class="nx">dataPath</span><span class="p">.</span><span class="nx">pathExists</span> <span class="o">==</span> <span class="ss">\folder</span><span class="p">)</span> <span class="p">{</span>
+	<span class="o">~</span><span class="nx">dataset</span> <span class="o">=</span> <span class="nx">FluidDataSet</span><span class="p">(</span><span class="nx">s</span><span class="p">).</span><span class="nx">read</span><span class="p">(</span><span class="nx">datasetPath</span><span class="p">,</span> <span class="nx">action</span><span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;dataset loaded!&quot;</span><span class="p">.</span><span class="nx">postln</span><span class="p">;</span> <span class="p">});</span>
+	<span class="o">~</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">read</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">sourcePath</span><span class="p">,</span> <span class="nx">action</span><span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;Backup of ~src loaded!&quot;</span><span class="p">.</span><span class="nx">postln</span><span class="p">;</span> <span class="p">});</span>
+	<span class="o">~</span><span class="nx">indices</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">read</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">indicesPath</span><span class="p">,</span> <span class="nx">action</span><span class="o">:</span> <span class="p">{</span> <span class="s2">&quot;Backup of ~indices loaded!&quot;</span><span class="p">.</span><span class="nx">postln</span><span class="p">;</span> <span class="p">});</span>
+<span class="p">}</span> <span class="p">{</span>
+	<span class="s2">&quot;This dataPath doesn&#39;t exist.&quot;</span><span class="p">.</span><span class="nx">postln</span><span class="p">;</span>
+	<span class="s2">&quot;You need to back up an analysis for this ~folder first!&quot;</span><span class="p">.</span><span class="nx">postln</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>After you’ve made sure the backup process works, you can basically delete the files that you’ve converted and collected, assuming they are a copy of an original.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Some will say that writing backup files like this is not preferable. Instead we should have separate SuperCollider code for each analysis result we want to come back to, in order to keep things stateless. This implies that we will have to repeat the whole analysis each time before we can start making music.</p>
+</div>
+</section>
+</section>
+<section id="synthesis-preparations">
+<span id="prepare-synth"></span><h2>4. Synthesis preparations<a class="headerlink" href="#synthesis-preparations" title="Link to this heading">#</a></h2>
+<section id="envelopes">
+<span id="env"></span><h3>Envelopes<a class="headerlink" href="#envelopes" title="Link to this heading">#</a></h3>
+<p>Creating a dictionary <code class="docutils literal notranslate"><span class="pre">q</span></code> to store some different envelopes:</p>
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="c1">// create a dictionary</span>
+<span class="nx">q</span> <span class="o">=</span> <span class="nx">q</span> <span class="o">?</span> <span class="p">();</span>
+
+<span class="c1">// store some different envelopes </span>
+<span class="p">(</span>
+<span class="nx">Routine</span><span class="p">.</span><span class="nx">run</span><span class="p">({</span>
+	<span class="nx">q</span><span class="p">.</span><span class="nx">perc</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">sendCollection</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">Env</span><span class="p">.</span><span class="nx">perc</span><span class="p">(</span><span class="mf">0.001</span><span class="p">,</span> <span class="nx">curve</span><span class="o">:</span> <span class="mi">0</span><span class="p">).</span><span class="nx">discretize</span><span class="p">);</span>
+	<span class="nx">s</span><span class="p">.</span><span class="nx">sync</span><span class="p">;</span>
+	<span class="nx">q</span><span class="p">.</span><span class="nx">full</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">sendCollection</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">Env</span><span class="p">.</span><span class="k">new</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]).</span><span class="nx">discretize</span><span class="p">);</span>
+	<span class="nx">s</span><span class="p">.</span><span class="nx">sync</span><span class="p">;</span>
+	<span class="nx">q</span><span class="p">.</span><span class="nx">sine</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">sendCollection</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">Env</span><span class="p">.</span><span class="nx">sine</span><span class="p">.</span><span class="nx">discretize</span><span class="p">);</span>
+	<span class="nx">s</span><span class="p">.</span><span class="nx">sync</span><span class="p">;</span>
+	<span class="nx">q</span><span class="p">.</span><span class="nx">fitted</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">sendCollection</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">Env</span><span class="p">.</span><span class="k">new</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mf">0.01</span><span class="p">,</span><span class="mf">0.98</span><span class="p">,</span><span class="mf">0.01</span><span class="p">]).</span><span class="nx">discretize</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="synths">
+<span id="synth"></span><h3>Synths<a class="headerlink" href="#synths" title="Link to this heading">#</a></h3>
+<p>A <code class="docutils literal notranslate"><span class="pre">SynthDef</span></code> for playing a single segment:</p>
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
+<span class="nx">SynthDef</span><span class="p">(</span><span class="ss">\play_slice</span><span class="p">,</span> <span class="p">{</span>
+    <span class="kd">arg</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">buf</span><span class="p">,</span> <span class="nx">idxBuf</span><span class="p">,</span> <span class="nx">envBuf</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+    <span class="nx">rate</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nx">repeats</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nx">amp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nx">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nx">out</span><span class="p">;</span>
+
+	<span class="kd">var</span> <span class="nx">startsamp</span> <span class="o">=</span> <span class="nx">Index</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span><span class="nx">idxBuf</span><span class="p">,</span><span class="nx">index</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">stopsamp</span> <span class="o">=</span> <span class="nx">Index</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span><span class="nx">idxBuf</span><span class="p">,</span><span class="nx">index</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">phs</span> <span class="o">=</span> <span class="nx">Phasor</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">BufRateScale</span><span class="p">.</span><span class="nx">ir</span><span class="p">(</span><span class="nx">buf</span><span class="p">)</span> <span class="o">*</span> <span class="nx">rate</span><span class="p">,</span><span class="nx">startsamp</span><span class="p">,</span><span class="nx">stopsamp</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">sig</span> <span class="o">=</span> <span class="nx">BufRd</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nx">buf</span><span class="p">,</span><span class="nx">phs</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">dursecs</span> <span class="o">=</span> <span class="p">(</span><span class="nx">stopsamp</span> <span class="o">-</span> <span class="nx">startsamp</span><span class="p">)</span> <span class="o">/</span> <span class="nx">BufSampleRate</span><span class="p">.</span><span class="nx">ir</span><span class="p">(</span><span class="nx">buf</span><span class="p">)</span> <span class="o">/</span> <span class="nx">rate</span><span class="p">.</span><span class="nx">abs</span> <span class="o">*</span> <span class="nx">repeats</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">env</span> <span class="o">=</span> <span class="nx">BufRd</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">envBuf</span><span class="p">,</span> <span class="nx">Line</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">BufFrames</span><span class="p">.</span><span class="nx">ir</span><span class="p">(</span><span class="nx">envBuf</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">dursecs</span><span class="p">,</span> <span class="nx">doneAction</span><span class="o">:</span> <span class="mi">2</span><span class="p">),</span> <span class="nx">loop</span><span class="o">:</span><span class="mi">0</span><span class="p">);</span>
+
+	<span class="nx">OffsetOut</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">Pan2</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span><span class="nx">sig</span> <span class="o">*</span> <span class="nx">env</span> <span class="o">*</span> <span class="nx">amp</span><span class="p">,</span> <span class="nx">pos</span><span class="p">));</span>
+<span class="p">}).</span><span class="nx">add</span><span class="p">;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This <code class="docutils literal notranslate"><span class="pre">Synth</span></code> will play a single segment of the <code class="docutils literal notranslate"><span class="pre">~src</span></code> buffer with a fixed duration:</p>
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
+<span class="nx">SynthDef</span><span class="p">(</span><span class="ss">\play_slice_fixed_dur</span><span class="p">,</span> <span class="p">{</span>
+    <span class="kd">arg</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">buf</span><span class="p">,</span> <span class="nx">idxBuf</span><span class="p">,</span> <span class="nx">envBuf</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+    <span class="nx">rate</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nx">repeats</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nx">amp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nx">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nx">dur</span><span class="p">,</span> <span class="nx">out</span><span class="p">;</span>
+
+	<span class="kd">var</span> <span class="nx">startsamp</span> <span class="o">=</span> <span class="nx">Index</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span><span class="nx">idxBuf</span><span class="p">,</span><span class="nx">index</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">stopsamp</span> <span class="o">=</span> <span class="nx">Index</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span><span class="nx">idxBuf</span><span class="p">,</span><span class="nx">index</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">phs</span> <span class="o">=</span> <span class="nx">Phasor</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">BufRateScale</span><span class="p">.</span><span class="nx">ir</span><span class="p">(</span><span class="nx">buf</span><span class="p">)</span> <span class="o">*</span> <span class="nx">rate</span><span class="p">,</span><span class="nx">startsamp</span><span class="p">,</span><span class="nx">stopsamp</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">sig</span> <span class="o">=</span> <span class="nx">BufRd</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nx">buf</span><span class="p">,</span><span class="nx">phs</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">env</span> <span class="o">=</span> <span class="nx">BufRd</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">envBuf</span><span class="p">,</span> <span class="nx">Line</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">BufFrames</span><span class="p">.</span><span class="nx">ir</span><span class="p">(</span><span class="nx">envBuf</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">dur</span><span class="p">,</span> <span class="nx">doneAction</span><span class="o">:</span> <span class="mi">2</span><span class="p">),</span> <span class="nx">loop</span><span class="o">:</span><span class="mi">0</span><span class="p">);</span>
+
+	<span class="nx">OffsetOut</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">Pan2</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span><span class="nx">sig</span> <span class="o">*</span> <span class="nx">env</span> <span class="o">*</span> <span class="nx">amp</span><span class="p">,</span> <span class="nx">pos</span><span class="p">));</span>
+<span class="p">}).</span><span class="nx">add</span><span class="p">;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="realtime-analysis-functions">
+<span id="analyse"></span><h3>realtime analysis functions<a class="headerlink" href="#realtime-analysis-functions" title="Link to this heading">#</a></h3>
+<p>A <code class="docutils literal notranslate"><span class="pre">Synth</span></code> (or function) <code class="docutils literal notranslate"><span class="pre">~predict</span></code> that continuously analyses live-input for 13 MFCC bands and stores the result into a buffer.<br />
+The buffer data is then compared with our <code class="docutils literal notranslate"><span class="pre">~dataset</span></code> which contains the average of the same 13 bands over the time span of each segment of <code class="docutils literal notranslate"><span class="pre">~src</span></code> respectively.<br />
+It is important that the size of this mfcc buffer matches with <code class="docutils literal notranslate"><span class="pre">~dataset.cols</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">~predict.(continuous:0)</span></code> would trigger the prediction only once, when an input trigger occurs. This is more suitable for percussive audio input.</p>
+<p>Note that you have to re-evaluate this code block after every Cmd+Period, because the <code class="docutils literal notranslate"><span class="pre">OSCdef</span></code> is not persistent.</p>
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
+<span class="kd">var</span> <span class="nx">nmfccs</span> <span class="o">=</span> <span class="mi">13</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">winSize</span> <span class="o">=</span> <span class="mi">512</span><span class="p">;</span>
+<span class="c1">// trig-rate according to the analysis window size:</span>
+<span class="c1">// var trate = s.sampleRate / winSize / 0.5;</span>
+<span class="kd">var</span> <span class="nx">trate</span> <span class="o">=</span> <span class="mi">40</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">mfccBuf</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">alloc</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="nx">nmfccs</span><span class="p">);</span>
+
+<span class="c1">// choose any of the newly created envelopes …</span>
+<span class="o">~</span><span class="nx">env</span> <span class="o">=</span> <span class="o">~</span><span class="nx">env</span> <span class="o">?</span> <span class="nx">q</span><span class="p">.</span><span class="nx">full</span><span class="p">;</span>
+<span class="c1">// … an amplitude …</span>
+<span class="o">~</span><span class="nx">amp</span> <span class="o">=</span> <span class="o">~</span><span class="nx">amp</span> <span class="o">?</span> <span class="mf">0.5</span><span class="p">;</span>
+<span class="c1">// … the number of neighbours in the kdtree to return</span>
+<span class="o">~</span><span class="nx">numNeighbors</span> <span class="o">=</span> <span class="o">~</span><span class="nx">numNeighbors</span> <span class="o">?</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="c1">// just making sure that we free the buffer when we do Cmd+Period</span>
+<span class="nx">CmdPeriod</span><span class="p">.</span><span class="nx">doOnce</span><span class="p">({</span> <span class="nx">mfccBuf</span><span class="p">.</span><span class="nx">free</span> <span class="p">});</span>
+
+<span class="o">~</span><span class="nx">predict</span> <span class="o">=</span> <span class="p">{</span> <span class="o">|</span><span class="nx">continuous</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="nx">out</span><span class="o">=</span><span class="mi">0</span><span class="o">|</span>
+	<span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">sig</span> <span class="o">=</span> <span class="nx">HPF</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span><span class="nx">SoundIn</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">30</span><span class="p">);</span>
+		<span class="kd">var</span> <span class="nx">mfccs</span> <span class="o">=</span> <span class="nx">FluidMFCC</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span>
+			<span class="k">in</span><span class="o">:</span> <span class="nx">sig</span><span class="p">,</span>
+			<span class="nx">startCoeff</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+			<span class="nx">numCoeffs</span><span class="o">:</span> <span class="nx">nmfccs</span><span class="p">,</span>
+			<span class="nx">minFreq</span><span class="o">:</span> <span class="mi">30</span><span class="p">,</span>
+			<span class="nx">maxFreq</span><span class="o">:</span> <span class="mi">16000</span><span class="p">,</span>
+			<span class="nx">windowSize</span><span class="o">:</span> <span class="nx">winSize</span>
+		<span class="p">);</span>
+		<span class="kd">var</span> <span class="nx">loudness</span> <span class="o">=</span> <span class="nx">FluidLoudness</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span><span class="nx">sig</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+		<span class="c1">// You can adjust either this parameter or your input gain.</span>
+		<span class="c1">// unfortunately this parameter cannot me set from the outside</span>
+		<span class="kd">var</span> <span class="nx">thresh</span> <span class="o">=</span> <span class="o">-</span><span class="mi">45</span><span class="p">;</span>
+		<span class="kd">var</span> <span class="nx">isPredicting</span> <span class="o">=</span> <span class="p">(</span><span class="nx">loudness</span> <span class="o">&gt;=</span> <span class="nx">thresh</span><span class="p">);</span>
+		<span class="kd">var</span> <span class="nx">trig</span> <span class="o">=</span> <span class="nx">Select</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span><span class="nx">continuous</span><span class="p">,</span> <span class="p">[</span><span class="nx">DC</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="nx">Impulse</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span><span class="nx">trate</span><span class="p">)]);</span>
+        <span class="c1">// store the result into a buffer</span>
+		<span class="nx">FluidKrToBuf</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span><span class="nx">mfccs</span><span class="p">,</span> <span class="nx">mfccBuf</span><span class="p">);</span>
+        <span class="c1">// trigger the OSCdef when a trigger happens:</span>
+		<span class="nx">SendReply</span><span class="p">.</span><span class="nx">kr</span><span class="p">(</span><span class="nx">isPredicting</span> <span class="o">*</span> <span class="nx">trig</span><span class="p">,</span> <span class="s2">&quot;/predict&quot;</span><span class="p">);</span>
+		<span class="c1">// uncomment if you also want to hear the input (sig)</span>
+		<span class="nx">Out</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span><span class="nx">out</span><span class="p">,</span> <span class="nx">Pan2</span><span class="p">.</span><span class="nx">ar</span><span class="p">(</span><span class="nx">sig</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+	<span class="p">}.</span><span class="nx">play</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">OSCdef</span><span class="p">(</span><span class="ss">\predictions</span><span class="p">,</span> <span class="p">{</span> <span class="o">|</span><span class="nx">msg</span><span class="o">|</span>
+	<span class="o">~</span><span class="nx">kdtree</span><span class="p">.</span><span class="nx">kNearest</span><span class="p">(</span><span class="nx">mfccBuf</span><span class="p">,</span> <span class="o">~</span><span class="nx">numNeighbors</span><span class="p">,</span> <span class="p">{</span> <span class="o">|</span><span class="nx">indices</span><span class="o">|</span>
+		<span class="c1">// indices need to be an array,</span>
+		<span class="c1">// no matter if ~numNeighbours &gt; 1 or not</span>
+		<span class="nx">indices</span> <span class="o">=</span> <span class="nx">indices</span><span class="p">.</span><span class="nx">asInteger</span><span class="p">.</span><span class="nx">bubble</span><span class="p">.</span><span class="nx">flat</span><span class="p">;</span>
+		<span class="c1">// indices.postln; // uncomment if you want to see</span>
+		<span class="k">if</span><span class="p">(</span><span class="nx">indices</span><span class="p">.</span><span class="nx">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>  
+			<span class="nx">indices</span><span class="p">.</span><span class="k">do</span><span class="p">{</span> <span class="o">|</span><span class="nx">index</span><span class="o">|</span>
+				<span class="nx">Synth</span><span class="p">.</span><span class="nx">grain</span><span class="p">(</span><span class="ss">\play_slice</span><span class="p">,</span> <span class="p">[</span>
+					<span class="ss">\buf</span><span class="p">,</span> <span class="o">~</span><span class="nx">src</span><span class="p">,</span>
+					<span class="ss">\envBuf</span><span class="p">,</span> <span class="o">~</span><span class="nx">env</span><span class="p">,</span>
+					<span class="ss">\idxBuf</span><span class="p">,</span> <span class="o">~</span><span class="nx">indices</span><span class="p">,</span>
+					<span class="ss">\index</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span>
+					<span class="c1">// for use with \play_slice_fixed_dur:</span>
+					<span class="c1">// \dur, trate.reciprocal * 2,</span>
+					<span class="ss">\pos</span><span class="p">,</span> <span class="p">{</span> <span class="mf">0.75</span><span class="p">.</span><span class="nx">rand2</span> <span class="p">},</span>
+					<span class="ss">\amp</span><span class="p">,</span> <span class="o">~</span><span class="nx">amp</span> <span class="o">/</span> <span class="nx">indices</span><span class="p">.</span><span class="nx">size</span><span class="p">,</span>
+				<span class="p">])</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">})</span>
+<span class="p">},</span><span class="s2">&quot;/predict&quot;</span><span class="p">);</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="live">
+<span id="id1"></span><h2>5. Live<a class="headerlink" href="#live" title="Link to this heading">#</a></h2>
+<p>Now we can play the function <code class="docutils literal notranslate"><span class="pre">~predict</span></code> and change some parameters on the fly:</p>
+<div class="highlight-supercollider notranslate"><div class="highlight"><pre><span></span><span class="c1">// continuous triggers:</span>
+<span class="o">~</span><span class="nx">predict</span><span class="p">.(</span><span class="nx">continuous</span><span class="o">:</span><span class="mi">1</span><span class="p">);</span>
+
+<span class="c1">// single triggers:</span>
+<span class="o">~</span><span class="nx">predict</span><span class="p">.(</span><span class="nx">continuous</span><span class="o">:</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="c1">// the amplitude</span>
+<span class="o">~</span><span class="nx">amp</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">;</span>
+<span class="c1">// the number of nearest segments to return:</span>
+<span class="o">~</span><span class="nx">numNeighbors</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="o">~</span><span class="nx">numNeighbors</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="c1">// the envelope:</span>
+<span class="o">~</span><span class="nx">env</span> <span class="o">=</span> <span class="nx">q</span><span class="p">.</span><span class="nx">full</span><span class="p">;</span>
+<span class="o">~</span><span class="nx">env</span> <span class="o">=</span> <span class="nx">q</span><span class="p">.</span><span class="nx">sine</span><span class="p">;</span>
+<span class="o">~</span><span class="nx">env</span> <span class="o">=</span> <span class="nx">q</span><span class="p">.</span><span class="nx">fitted</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="ffmpeg-optional">
+<span id="ffmpeg"></span><h2>6. ffmpeg (optional)<a class="headerlink" href="#ffmpeg-optional" title="Link to this heading">#</a></h2>
+<p>These steps can be performed on our folder of samples before loading it into SuperCollider.</p>
+<section id="easy-ffmpeg-sample-rate-conversion">
+<h3>Easy ffmpeg sample rate conversion:<a class="headerlink" href="#easy-ffmpeg-sample-rate-conversion" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">sample</span><span class="o">/</span><span class="n">directory</span>
+<span class="n">mkdir</span> <span class="o">../</span><span class="n">conv</span> 
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="o">*.</span><span class="n">wav</span> 
+<span class="n">do</span> <span class="n">ffmpeg</span> <span class="o">-</span><span class="n">i</span> <span class="s2">&quot;$i&quot;</span> <span class="o">-</span><span class="n">ar</span> <span class="mi">48000</span> <span class="s2">&quot;../conv/${i%.*}.wav&quot;</span> 
+<span class="n">done</span>
+</pre></div>
+</div>
+</section>
+<section id="with-hiphpass-filter">
+<h3>… with hiphpass filter:<a class="headerlink" href="#with-hiphpass-filter" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">sample</span><span class="o">/</span><span class="n">directory</span>
+<span class="n">mkdir</span> <span class="o">../</span><span class="n">conv</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="o">*.</span><span class="n">wav</span> 
+<span class="n">do</span> <span class="n">ffmpeg</span> <span class="o">-</span><span class="n">i</span> <span class="s2">&quot;$i&quot;</span> <span class="o">-</span><span class="n">af</span> <span class="n">highpass</span><span class="o">=</span><span class="mi">30</span> <span class="o">-</span><span class="n">ar</span> <span class="mi">48000</span> <span class="s2">&quot;../conv/${i%.*}.wav&quot;</span> 
+<span class="n">done</span>
+</pre></div>
+</div>
+</section>
+<section id="and-normalization">
+<h3>… and normalization:<a class="headerlink" href="#and-normalization" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">sample</span><span class="o">/</span><span class="n">directory</span>
+<span class="n">mkdir</span> <span class="o">../</span><span class="n">conv</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="o">*.</span><span class="n">wav</span> 
+<span class="n">do</span> <span class="n">ffmpeg</span><span class="o">-</span><span class="n">normalize</span> <span class="s2">&quot;$i&quot;</span> <span class="o">-</span><span class="n">prf</span> <span class="n">highpass</span><span class="o">=</span><span class="n">f</span><span class="o">=</span><span class="mi">30</span> <span class="o">-</span><span class="n">ar</span> <span class="mi">48000</span> <span class="o">-</span><span class="n">of</span> <span class="s2">&quot;../conv/${i%.*}.wav&quot;</span> 
+<span class="n">done</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./src"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="day1-flucoma.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Day 1 - Introduction to FluCoMa</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../bibliography.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Bibliography</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-library-preparation">1. Sample library preparation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#segmentation">Segmentation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stripping-silence-optional">Stripping silence (optional)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wavesets-optional">Wavesets (optional)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spectral-analysis">2. Spectral analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#backup-optional">3. Backup (optional)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#saving">Saving</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loading">Loading</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synthesis-preparations">4. Synthesis preparations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#envelopes">Envelopes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#synths">Synths</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#realtime-analysis-functions">realtime analysis functions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#live">5. Live</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ffmpeg-optional">6. ffmpeg (optional)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#easy-ffmpeg-sample-rate-conversion">Easy ffmpeg sample rate conversion:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#with-hiphpass-filter">… with hiphpass filter:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#and-normalization">… and normalization:</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dennis Scheiba
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
