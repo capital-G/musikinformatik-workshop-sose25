@@ -1,4 +1,4 @@
-# Realtime CCS
+# Day 1 - Realtime CCS
 
 The methods shown here are one way of realizing [real-time *corpus based concatenative synthesis*](https://www.ircam.fr/projects/pages/synthese-concatenative-par-corpus) in SuperCollider using the [FluCoMa](https://www.flucoma.org/) Toolchain.  
 
