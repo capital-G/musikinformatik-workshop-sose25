@@ -1,10 +1,10 @@
 # Realtime CCS
 
-The methods shown here are one way of realizing [real-time *corpus based concatenative synthesis*](https://www.ircam.fr/projects/pages/synthese-concatenative-par-corpus) in SuperCollider using the [FluCoMa](https://www.flucoma.org/) Toolchain. 
+The methods shown here are one way of realizing [real-time *corpus based concatenative synthesis*](https://www.ircam.fr/projects/pages/synthese-concatenative-par-corpus) in SuperCollider using the [FluCoMa](https://www.flucoma.org/) Toolchain.  
 
-The Code shown here is mostly frankensteined from Todd Moores YouTube Tutorials on the [FluCoMa YT Channel](https://www.youtube.com/@FluidCorpusManipulation):
+The Code shown here is mostly frankensteined from Todd Moores YouTube Tutorials on the [FluCoMa YT Channel](https://www.youtube.com/@FluidCorpusManipulation):  
 
-- [2D Corpus Explorer (SuperCollider)](https://www.youtube.com/watch?v=9yoAGbs2eJ8&t=36s)
+- [2D Corpus Explorer (SuperCollider)](https://www.youtube.com/watch?v=9yoAGbs2eJ8&t=36s)  
 
 
 <iframe width="988" height="556" src="https://www.youtube.com/embed/9yoAGbs2eJ8" title="2D Corpus Explorer (SuperCollider) Part 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -14,7 +14,7 @@ The Code shown here is mostly frankensteined from Todd Moores YouTube Tutorials 
 
 
 <iframe width="988" height="556" src="https://www.youtube.com/embed/Y1cHmtbQPSk" title="Classifying Sounds using a Neural Network in SuperCollider" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-Motivation and inspiration was drawn from these examples aswell:
+Motivation and inspiration was drawn from these examples aswell:  
 - [Sound Into Sound](https://learn.flucoma.org/explore/constanzo/)
 - [Corpus-Based Sampler Performance](https://www.youtube.com/watch?v=WMGHqyyn1TE)
 
@@ -26,12 +26,17 @@ Audio material was mainly sourced from [Musicradar](https://www.musicradar.com/n
 (prepare_sample)=
 ## 1. Sample library preparation
 
-First we have to choose a folder of samples that we will use as reference material. This directory `~folder` (and it's sub-direcotries) should contain a variety of qualitatively different audio material in the same samplerate[^sr].
-In the next step, this material is summed to mono and written to a single Buffer `~src` which will first be segmented by onset detection and then analysed for certain spectral features. 
+First we have to choose a folder of samples that we will use as reference material. This directory `~folder` (and it's sub-direcotries) should contain a variety of qualitatively different audio material in the same samplerate.  
 
-It makes sense to use a single buffer in this specific use case. If you are working with a library of files that each contain single percussive hits, a different approach is needed. 
+```{note} 
+`FluidBufCompose` does not interpolate, when writing the audio into a buffer consecutively. Non-matching samplerates will lead to a deviation in playback-rate and thus pitch and length.
+```
 
-```c++
+In the next step, this material is summed to mono and written to a single Buffer `~src` which will first be segmented by onset detection and then analysed for certain spectral features.   
+
+It makes sense to use a single buffer in this specific use case. If you are working with a library of files that each contain single percussive hits, a different approach is needed.   
+
+```supercollider
 // choose a directory of samples
 ~folder = "/path/to/sample/directory/";
 
@@ -68,11 +73,10 @@ if(~loader.buffer.numChannels > 1){
 (segment)=
 ### Segmentation
 Next we will segment the newly created audiobuffer `~src` by onset detection and save the result in another buffer `~indices`.  
-Confusion can arise  here because to SuperCollider users, buffers are commonly used for storing audio data only. Here we start using them for storing analysis data instead.
+Confusion can arise  here because to SuperCollider users, buffers are commonly used for storing audio data only. Here we start using them for storing analysis data instead.  
 
-The parameters of `FluidBufOnsetSlice` used here are tweaked to my library and 
-Read the [FluCoMa documentation for Onset Slicing](https://learn.flucoma.org/reference/onsetslice/)  for a better understanding of the different metrics. 
-```c++
+The parameters of `FluidBufOnsetSlice` used here are tweaked to my library and read the [FluCoMa documentation for Onset Slicing](https://learn.flucoma.org/reference/onsetslice/)  for a better understanding of the different metrics.  
+```supercollider
 // slice the buffer in non real-time
 (
 ~indices = Buffer(s);
@@ -99,9 +103,9 @@ average duration per slice: 0.22336125043999
 
 (strip)=
 ### Stripping silence (optional)
-Depending on the material, it could be advantageous to remove silence (or rather "very low amplitude noise") from the buffer, as it will alter the spectral analysis aswell as the (optional) wavesets analysis. 
+Depending on the material, it could be advantageous to remove silence (or rather "very low amplitude noise") from the buffer, as it will alter the spectral analysis aswell as the (optional) wavesets analysis.  
 
-```c++
+```supercollider
 (
 fork{
 	var indices = Buffer(s);
@@ -144,14 +148,14 @@ fork{
 
 (wavesets)=
 ### Wavesets (optional) 
-This can surely be improved upon, but note that `FluidBufOnsetSlice` doesn't care about zero-crossings. This can later lead to clicks and pops when playing a segment of the buffer `~src` without an envelope. 
-Wavesets introduces a whole new set of options for the playback of audio buffers aswell, which will be explored in later projects. 
+This can surely be improved upon, but note that `FluidBufOnsetSlice` doesn't care about zero-crossings. This can later lead to clicks and pops when playing a segment of the buffer `~src` without an envelope.  
+Wavesets introduces a whole new set of options for the playback of audio buffers aswell, which will be explored in later projects.  
 
 ```{note} highpass
 The quality of a wavesets analysis can be improved by applying a highpass-filter to your audio source material (see [*ffmpeg*](ffmpeg)) and stripping silence (see [*Stripping silence*](strip)).
 ```
 
-```c++
+```supercollider
 /*
 // install WavesetsEvent if you haven't already  
 Quarks.install("WavesetsEvent");
@@ -193,9 +197,8 @@ var newIndices;
 (spectral)=
 ## 2. Spectral analysis
 
-Now that we have segmented the `~src` we will analyze it slice by slice for MFCC features and then perform some statistical analysis on these features. 
-
-```c++
+Now that we have segmented the `~src` we will analyze it slice by slice for MFCC features and then perform some statistical analysis on these features:  
+```supercollider
 (
 ~dataset = FluidDataSet(s);
 
@@ -255,9 +258,8 @@ Now that we have segmented the `~src` we will analyze it slice by slice for MFCC
 When you're running out of buffers during this process, you need to reboot the server with a higher number of `s.options.numBuffers` (see [Sample library preparation](prepare_sample)) and repeat all previous steps.
 ```
 
-
-Now that we have created our `~dataset`, we need to fit a  `FluidKDTree`
-```c++
+Now that we have created our `~dataset`, we need to fit a  `FluidKDTree`:  
+```supercollider
 ~kdtree = FluidKDTree(s);
 ~kdtree.fit(~dataset, action: { "KDTree ready!".postln; });
 ```
@@ -265,11 +267,11 @@ Now that we have created our `~dataset`, we need to fit a  `FluidKDTree`
 (backup)=
 ## 3. Backup (optional)
 
-Now it could make sense to create a backup of our `~dataset` and the buffers `~src` and `~indices`. 
+Now it could make sense to create a backup of our `~dataset` and the buffers `~src` and `~indices`.  
 
 (save)=
 ### Saving
-```c++
+```supercollider
 // Back up analysis data
 (
 var version = "0";
@@ -311,7 +313,7 @@ if(indicesPath.pathExists == \file) {
 (load)=
 ### Loading
 From now on, our newly created backup can be loaded as follows:
-```c++
+```supercollider
 // in the future you can start from here:
 ~folder = "/path/to/sample/directory_data/";
 
@@ -335,7 +337,7 @@ if(dataPath.pathExists == \folder) {
 )
 ```
 
-After you've made sure the backup process works, you can basically delete the files that you've converted and collected, assuming they are a copy of an original. 
+After you've made sure the backup process works, you can basically delete the files that you've converted and collected, assuming they are a copy of an original.  
 
 ```{note} discussion
 Some will say that writing backup files like this is not preferable. Instead we should have separate SuperCollider code for each analysis result we want to come back to, in order to keep things stateless. This implies that we will have to repeat the whole analysis each time before we can start making music. 
@@ -346,9 +348,9 @@ Some will say that writing backup files like this is not preferable. Instead we 
 
 (env)=
 ### Envelopes
-Here we are creating a dictionary `q` to store some different envelopes.
+Creating a dictionary `q` to store some different envelopes:  
 
-```c++ 
+```supercollider 
 // create a dictionary
 q = q ? ();
 
@@ -369,7 +371,7 @@ Routine.run({
 (synth)=
 ### Synths
 A `SynthDef` for playing a single segment:  
-```c++ 
+```supercollider 
 (
 SynthDef(\play_slice, {
     arg index, buf, idxBuf, envBuf=(-1),
@@ -389,7 +391,7 @@ SynthDef(\play_slice, {
 
 This `Synth` will play a single segment of the `~src` buffer with a fixed duration:
 
-```c++
+```supercollider
 (
 SynthDef(\play_slice_fixed_dur, {
     arg index, buf, idxBuf, envBuf=(-1),
@@ -409,15 +411,14 @@ SynthDef(\play_slice_fixed_dur, {
 
 (analyse)=
 ### realtime analysis functions
-A `Synth` (or function) `~predict` that continuously analyses live-input for 13 MFCC bands and stores the result into a buffer. 
+A `Synth` (or function) `~predict` that continuously analyses live-input for 13 MFCC bands and stores the result into a buffer.  
 The buffer data is then compared with our `~dataset` which contains the average of the same 13 bands over the time span of each segment of `~src` respectively.   
-It is important that the size of this mfcc buffer matches with `~dataset.cols`. 
+It is important that the size of this mfcc buffer matches with `~dataset.cols`.  
 
-`~predict.(continuous:0)` would trigger the prediction only once, when an input trigger occurs. This is more suitable for percussive audio input. 
+`~predict.(continuous:0)` would trigger the prediction only once, when an input trigger occurs. This is more suitable for percussive audio input.  
 
 Note that you have to re-evaluate this code block after every Cmd+Period, because the `OSCdef` is not persistent.  
-
-```c++
+```supercollider
 (
 var nmfccs = 13;
 var winSize = 512;
@@ -490,9 +491,8 @@ OSCdef(\predictions, { |msg|
 (live)=
 ## 5. Live
 
-Now we can play the function `~predict` and change some parameters on the fly:
-
-```c++
+Now we can play the function `~predict` and change some parameters on the fly:  
+```supercollider
 // continuous triggers:
 ~predict.(continuous:1);
 
@@ -513,7 +513,7 @@ Now we can play the function `~predict` and change some parameters on the fly:
 (ffmpeg)=
 ## 6. ffmpeg (optional)
 
-These steps can be performed on our folder of samples before loading it into SuperCollider.
+These steps can be performed on our folder of samples before loading it into SuperCollider.  
 ### Easy ffmpeg sample rate conversion:   
 ```
 cd /path/to/sample/directory
@@ -539,6 +539,4 @@ for i in *.wav
 do ffmpeg-normalize "$i" -prf highpass=f=30 -ar 48000 -of "../conv/${i%.*}.wav" 
 done
 ```
-
-
-[^sr]: `FluidBufCompose` does not interpolate, when writing the audio into a buffer consecutively. Non-matching samplerates will lead to a deviation in playback-rate and thus pitch and length.   
+   
