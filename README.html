@@ -346,6 +346,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development">Development</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a></li>
 </ul>
             </nav>
@@ -363,6 +364,20 @@ document.write(`
 <blockquote>
 <div><p>Introduction to FluCoMa and RAVE</p>
 </div></blockquote>
+<section id="development">
+<h2>Development<a class="headerlink" href="#development" title="Link to this heading">#</a></h2>
+<p>Use the following commands to build the book locally, assuming Python and <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code> is installed</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a new virtual environment within the folder venv</span>
+virtualenv<span class="w"> </span>venv
+<span class="c1"># activate virtual environment</span>
+<span class="nb">source</span><span class="w"> </span>venv/bin/activate
+<span class="c1"># install dependencies</span>
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<span class="c1"># build the book</span>
+venv/bin/jupyter-book<span class="w"> </span>build<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
 <section id="license">
 <h2>License<a class="headerlink" href="#license" title="Link to this heading">#</a></h2>
 <p>CC-BY-SA-4.0</p>
@@ -415,6 +430,7 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development">Development</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a></li>
 </ul>
   </nav></div>
