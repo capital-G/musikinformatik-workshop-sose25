@@ -1,7 +1,6 @@
 
 // drums folder with both loops and single hits
 ~folder = "/my/folder/with/drums"
-~folder = "/home/dizzy/Music/Samples/FluCoMa/drums/";
 
 (
 // start over
