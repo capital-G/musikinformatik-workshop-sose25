@@ -1,5 +1,7 @@
 # Day 1 - Realtime CCS
 
+By [FunctionalJerk](https://functionaljerk.github.io/projects)  
+
 The methods shown here are one way of realizing [real-time *corpus based concatenative synthesis*](https://www.ircam.fr/projects/pages/synthese-concatenative-par-corpus) in SuperCollider using the [FluCoMa](https://www.flucoma.org/) Toolchain.  
 
 The Code shown here is mostly frankensteined from Todd Moores YouTube Tutorials on the [FluCoMa YT Channel](https://www.youtube.com/@FluidCorpusManipulation):  
