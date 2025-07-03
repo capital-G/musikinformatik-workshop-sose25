@@ -40,6 +40,8 @@ if(~loader.buffer.numChannels > 1){
 // stripping silence:
 // decide for yourself if this makes any sense for you.
 // otherwise skip this part
+// I would expect the number of slices found here
+// to be LESS than the indices found through onset detection
 (
 fork{
 	var indices = Buffer(s);
@@ -51,7 +53,10 @@ fork{
 		indices: indices,
 		onThreshold: -55,
 		offThreshold: -60,
-		minSliceLength: 4800,
+		minSliceLength: ~src.sampleRate * 0.1,
+		rampUp: 100,
+		rampDown: 100,
+		// highPassFreq: 20,
 	);
 	s.sync;
 
@@ -60,7 +65,14 @@ fork{
 		fa.clump(2).do({ |arr,index|
 			var start = arr[0];
 			var num = arr[1] - start;
-			FluidBufCompose.processBlocking(s,~src,start,num,destination:temp,destStartFrame:curr);
+			FluidBufCompose.processBlocking(
+				server: s,
+				source: ~src,
+				startFrame: start,
+				numFrames: num,
+				destination:temp,
+				destStartFrame:curr
+			);
 			curr = curr + num;
 			s.sync;
 			"Slice no: % / %\n".postf(index+1,(fa.size / 2).asInteger);
@@ -73,6 +85,7 @@ fork{
 }
 )
 
+
 (
 ~indices = Buffer(s);
 FluidBufOnsetSlice.processBlocking(s,
@@ -83,9 +96,10 @@ FluidBufOnsetSlice.processBlocking(s,
 	windowSize: ~winSize,
 	indices: ~indices,
 	action:{
-		"found % slice points".format(~indices.numFrames).postln;
-		"average duration per slice: %".format(~src.duration / (~indices.numFrames+1)).postln;
-});
+		"found % slice points\n".postf(~indices.numFrames);
+		"average duration per slice: %\n".postf(~src.duration / (~indices.numFrames+1));
+	}
+);
 )
 
 (
@@ -136,39 +150,25 @@ FluidBufOnsetSlice.processBlocking(s,
 });
 )
 
-///////////////////////////////////////////
-// only needed for plotting
-(
-~umapped = FluidDataSet(s);
-FluidUMAP(s,numNeighbours:15,minDist:1.2).fitTransform(~dataset,~umapped,action:{"umap done".postln});
-)
-
-// normalize
-(
-~normed = FluidDataSet(s);
-FluidNormalize(s).fitTransform(~umapped,~normed,action:{"normalization done".postln});
-)
-
-// fit a kd tree
-~kdtree = FluidKDTree(s);
-~kdtree.fit(~normed, action: { "KDTree ready!".postln; });
-// get data dictionary
-~normed.dump({|dict| ~dict = dict });
-
 // object prototyping
 (
-~makePatternObject = {|id,src,path,kdtree,dict,indices|
+~makePatternObject = {|server,src,path,dataset,indices,id|
 	(
-		id: id,
+		server: server ? s,
 		src: src,
 		path: path,
-		kdtree: kdtree,
+		dataset: dataset,
 		indices: indices,
-		dict: dict,
-		numDimensions: {|self| self.kdtree.cols },
-		numDataPoints: {|self| self.kdtree.size },
-		pointBuf: Buffer.alloc(s, 2),
-		envBuf: Buffer.loadCollection(s, Env.perc.discretize),
+		id: id ? 0,
+
+		kdtree: nil,
+		umapped: nil,
+		normed: nil,
+		dict: nil,
+		numDimensions: 2,
+		numDatapoints: nil,
+		pointBuf: nil,
+		envBuf: Buffer.loadCollection(server, Env.perc.discretize),
 		name: { PathName.new(path).folderName },
 		eventName: {|self| (self.name ++ "_" ++ self.id.asString).asSymbol },
 		synthName: {|self| ("play_" ++ self.name ++ "_" ++ self.id.asString).asSymbol },
@@ -206,7 +206,7 @@ FluidNormalize(s).fitTransform(~umapped,~normed,action:{"normalization done".pos
 				vec = vec / vecLength * dist.abs;
 				point = center + vec % 1.0;
 
-				self.pointBuf.loadCollection(point, action: {|buf|
+				Buffer.loadCollection(self.server, point, action: {|buf|
 
 					self.kdtree.kNearest(buf, numNeighbors, { |nearest|
 						nearest = nearest.bubble.flat;
@@ -225,9 +225,10 @@ FluidNormalize(s).fitTransform(~umapped,~normed,action:{"normalization done".pos
 								// \pos, phi + (i*0.5),
 								\rate, rate,
 								\out, out,
-							]);
+							], self.server);
 						}
-					})
+					});
+					buf.free;
 				})
 			})
 		},
@@ -250,7 +251,8 @@ FluidNormalize(s).fitTransform(~umapped,~normed,action:{"normalization done".pos
 								\index, nearest.asInteger,
 								\envBuf, self.envBuf,
 								\amp, 0.5,
-							]);
+							], self.server);
+							// nearest.postcs;
 							previous = nearest;
 						}
 					})
@@ -262,29 +264,54 @@ FluidNormalize(s).fitTransform(~umapped,~normed,action:{"normalization done".pos
 				self.plot;
 			}
 		},
+		init: {|self|
+			"initializing …".postln;
+
+			self.kdtree = FluidKDTree(self.server);
+			self.umapped = FluidDataSet(self.server);
+			self.normed = FluidDataSet(self.server);
+
+			FluidUMAP(
+				server:self.server,
+				numDimensions:self.numDimensions,
+				numNeighbours:8,
+				minDist:4,
+				iterations:400,
+				learnRate:0.5
+			).fitTransform(self.dataset,self.umapped,action:{
+				FluidNormalize(self.server).fitTransform(
+					sourceDataSet:self.umapped,
+					destDataSet:self.normed,
+					action:{
+						self.normed.dump({|dict| self.dict = dict });
+						self.kdtree.fit(self.normed,action:{
+
+							self.makeSynth;
+							self.makeEventType;
+							self.pointBuf = Buffer.alloc(self.server, self.numDimensions);
+							"… done!".postln;
+						})
+					}
+				)
+			})
+		},
 	)
 }
 )
 
-// initialize and create event type:
+// create and initialize event type:
 // IDs help us adress the same dataset in different patterns.
-// otherwise they would both write to the same self.pointBuf
 
-~drumSet = ~makePatternObject.(0, ~src, ~folder, ~kdtree, ~dict, ~indices);
-~drumSet2 = ~makePatternObject.(1, ~src, ~folder, ~kdtree, ~dict, ~indices);
-~drumSet.makeEventType;
-~drumSet.makeSynth;
-~drumSet2.makeEventType;
-
-~drumSet.eventName
+~drumSet = ~makePatternObject.(s, ~src, ~folder, ~dataset, ~indices);
+~drumSet.init;
 
 // plot and check if it makes any sense
 // this is the space we'll navigate with vectors soon
 ~drumSet.makePlot;
 
 //test event type
-(type: ~drumSet.eventName, index: 80
-, amp: 0.5, phi: 2pi.rand2, dist: 0.1).play
+(type: ~drumSet.eventName, index: 80, amp: 0.5, phi: 2pi.rand2, dist: 0.1).play
+(type: ~drumSet.eventName, index: 80, amp: 0.5, phi: 2pi.rand2, dist: 0.1).play
 
 // change envelope
 ~drumSet.envBuf = Buffer.loadCollection(s, Env.perc(0.001,curve:0).discretize);
@@ -294,11 +321,14 @@ FluidNormalize(s).fitTransform(~umapped,~normed,action:{"normalization done".pos
 // circular motion with exponentially growing distance
 Pdef(\drm, Pbind(
 	\type, 'drums_0',
-	\index, 100,
+	\index, 363,
 	// \phi, Pwhite(-2pi, 2pi, inf),
 	\phi, Pseg([-2pi, 2pi], 4, repeats: inf),
-	\dist, Pseg([0.01,0.3], 32, curves: 'exp', repeats: inf),
-	\dur, 0.125,
+	\dist, Pseg([0.01,0.2], 16, curves: 'exp', repeats: inf),
+	\repeats, Pstep([1,2,4,6], 1, inf),
+	\dur, 0.5,
+	\stretch, 1 / Pkey(\repeats),
+	\rate, Pkey(\repeats) * 0.5,
 	\amp, 0.5,
 )).play(quant:1)
 )
@@ -309,8 +339,8 @@ Pdef(\drm, Pbind(
 	\type, \drums_0,
 	\index, 485,
 	\phi, Pwhite(-2pi, 2pi, inf),
-	\dist, Pseg([0.0,0.4], 4, 'sin', inf),
-	\dur, 0.25,
+	\dist, Pseg([0.0,0.4,0.0], 4, 'sin', inf),
+	\dur, 0.125,
 	\amp, 0.5,
 )).play(quant:1)
 )
@@ -329,7 +359,7 @@ Pdef(\drm1, Pbind(
 (
 // groove variation
 Pdef(\grv, Pbind(
-	\type, \drums_1,
+	\type, \drums_0,
 	\index, 629,
 	\phi, Pseg([-2pi, 2pi], 4, repeats: inf),
 	\dist, Pwhite(0.0,0.05,inf),
